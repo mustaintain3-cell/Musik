@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Soul Family Reflexology Game</title>
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --secondary: #27ae60;
+            --accent: #e67e22;
+            --light: #ecf0f1;
+            --dark: #34495e;
+            --success: #2ecc71;
+            --warning: #f1c40f;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f7f6;
+            margin: 0;
+            color: var(--dark);
+        }
+
+        header {
+            background-color: var(--primary);
+            color: white;
+            padding: 1rem;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 20px auto;
+            display: grid;
+            grid-template-columns: 1fr 350px;
+            gap: 20px;
+            padding: 0 20px;
+        }
+
+        @media (max-width: 900px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .card {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            margin-bottom: 20px;
+        }
+
+        h2 {
+            margin-top: 0;
+            border-bottom: 2px solid var(--light);
+            padding-bottom: 10px;
+            color: var(--primary);
+        }
+
+        /* Therapists Grid */
+        .therapist-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 15px;
+        }
+
+        .therapist-card {
+            border: 2px solid var(--light);
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .therapist-card.busy {
+            background-color: #fff3e0;
+            border-color: var(--accent);
+        }
+
+        .therapist-card.ready {
+            background-color: #e8f5e9;
+            border-color: var(--success);
+        }
+
+        .status-badge {
+            font-size: 0.8rem;
+            font-weight: bold;
+            padding: 2px 8px;
+            border-radius: 10px;
+            margin-top: 5px;
+            display: inline-block;
+        }
+
+        .status-ready { background: var(--success); color: white; }
+        .status-busy { background: var(--accent); color: white; }
+
+        /* Customer Queue */
+        .queue-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            border-bottom: 1px solid var(--light);
+            background: #fff;
+            margin-bottom: 5px;
+            border-radius: 5px;
+        }
+
+        .assign-btn {
+            background: var(--secondary);
+            color: white;
+            border: none;
+            padding: 5px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .assign-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        /* Modal */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .service-list-btn {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0;
+            text-align: left;
+            background: white;
+            border: 1px solid var(--light);
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .service-list-btn:hover {
+            background: var(--light);
+        }
+
+        /* Stats & Reports */
+        .report-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .report-table th, .report-table td {
+            text-align: left;
+            padding: 10px;
+            border-bottom: 1px solid var(--light);
+        }
+
+        .ranking-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px dotted #ccc;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .btn {
+            padding: 8px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            flex: 1;
+        }
+
+        .btn-share { background: #25d366; color: white; }
+        .btn-report { background: var(--primary); color: white; }
+
+        .earnings {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: var(--secondary);
+            text-align: center;
+            margin: 10px 0;
+        }
+
+        #timer-box {
+            font-family: monospace;
+            font-size: 1.1rem;
+            background: #222;
+            color: #0f0;
+            padding: 10px;
+            text-align: center;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>My Soul Family Reflexology</h1>
+    <p>Sistem Manajemen Terapis & Layanan</p>
+</header>
+
+<div class="container">
+    <div class="main-content">
+        <!-- Game Stats -->
+        <div class="card" style="display: flex; justify-content: space-around; align-items: center;">
+            <div>
+                <small>Total Omset</small>
+                <div id="total-revenue" style="font-size: 1.5rem; font-weight: bold; color: var(--secondary);">Rp 0</div>
+            </div>
+            <div>
+                <small>Total Komisi Terapis</small>
+                <div id="total-commissions" style="font-size: 1.5rem; font-weight: bold; color: var(--accent);">Rp 0</div>
+            </div>
+        </div>
+
+        <!-- Therapists Section -->
+        <div class="card">
+            <h2>Daftar Terapys (Siap Kerja)</h2>
+            <div class="therapist-grid" id="therapist-list">
+                <!-- Dynamically populated -->
+            </div>
+        </div>
+
+        <!-- System Logs / Reports -->
+        <div class="card" id="report-section">
+            <h2>Laporan Kerja Perterapys</h2>
+            <div id="logs-container">
+                <table class="report-table">
+                    <thead>
+                        <tr>
+                            <th>Terapis</th>
+                            <th>Layanan</th>
+                            <th>Biaya</th>
+                            <th>Komisi (40%)</th>
+                        </tr>
+                    </thead>
+                    <tbody id="report-body">
+                        <!-- Transaksi akan muncul disini -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="sidebar">
+        <!-- Dashboard / Controls -->
+        <div class="card">
+            <h2>Kontrol Panel</h2>
+            <div id="timer-box">HARI 1 - 09:00</div>
+            <button class="btn btn-report" onclick="openRanking()" style="width: 100%; margin-bottom: 10px;">Lihat Ranking Terapis</button>
+            <p><small>*Klik terapis untuk melihat detail hasil perorangan.</small></p>
+        </div>
+
+        <div class="card">
+            <h2>Antrian Pelanggan</h2>
+            <div id="customer-queue">
+                <!-- Customers appear here -->
+                <p style="text-align: center; color: #999;">Menunggu pelanggan datang...</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Assignment -->
+<div class="modal-overlay" id="assignment-modal">
+    <div class="modal">
+        <h2 id="modal-title">Pilih Layanan untuk Customer</h2>
+        <div id="service-options">
+            <!-- Services populated here -->
+        </div>
+        <button class="btn" style="background:#ccc; margin-top: 15px;" onclick="closeModal()">Batal</button>
+    </div>
+</div>
+
+<!-- Modal Ranking -->
+<div class="modal-overlay" id="ranking-modal">
+    <div class="modal">
+        <h2>Ranking Terapis</h2>
+        <div id="ranking-list"></div>
+        <button class="btn" style="background:#ccc; margin-top: 15px;" onclick="closeRanking()">Tutup</button>
+    </div>
+</div>
+
+<!-- Modal Therapist Profile -->
+<div class="modal-overlay" id="profile-modal">
+    <div class="modal">
+        <h2 id="profile-name">Detail Terapis</h2>
+        <div id="profile-stats"></div>
+        <div class="btn-group">
+            <button id="wa-share-btn" class="btn btn-share">Share ke WhatsApp</button>
+            <button class="btn" style="background:#ccc;" onclick="closeProfile()">Tutup</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    // DATA INITIALIZATION
+    const therapists = [
+        { id: 1, name: "Pak Alam", status: "ready", earnings: 0, commission: 0, jobs: [] },
+        { id: 2, name: "Pak Misdi", status: "ready", earnings: 0, commission: 0, jobs: [] },
+        { id: 3, name: "Pak Nanang", status: "ready", earnings: 0, commission: 0, jobs: [] },
+        { id: 4, name: "Pak Hendy", status: "ready", earnings: 0, commission: 0, jobs: [] },
+        { id: 5, name: "Pak Anto", status: "ready", earnings: 0, commission: 0, jobs: [] },
+        { id: 6, name: "Bu Fukoh", status: "ready", earnings: 0, commission: 0, jobs: [] },
+        { id: 7, name: "Bu Denty", status: "ready", earnings: 0, commission: 0, jobs: [] },
+        { id: 8, name: "Bu Linda", status: "ready", earnings: 0, commission: 0, jobs: [] },
+        { id: 9, name: "Bu Siti", status: "ready", earnings: 0, commission: 0, jobs: [] }
+    ];
+
+    const services = [
+        { name: "Refleksi Flbody 90 mnt", price: 140000, duration: 90 },
+        { name: "Refleksi Fulbody 120 mnt", price: 170000, duration: 120 },
+        { name: "Fullbody 60 mnt", price: 105000, duration: 60 },
+        { name: "Fullbody 90 mnt", price: 130000, duration: 90 },
+        { name: "Fullbody 120 mnt", price: 165000, duration: 120 },
+        { name: "Sport Message 60 mnt", price: 125000, duration: 60 },
+        { name: "Sport Message 90 mnt", price: 150000, duration: 90 },
+        { name: "Sport Message 120 mnt", price: 185000, duration: 120 },
+        { name: "Bekam Basah", price: 100000, duration: 45 },
+        { name: "Kop Kering", price: 50000, duration: 20 },
+        { name: "Totok Wajah Viva 30 mnt", price: 50000, duration: 30 },
+        { name: "Totok Wajah Zaethun 15 mnt", price: 35000, duration: 15 },
+        { name: "Kerokan", price: 35000, duration: 15 },
+        { name: "Luluran Fulbody", price: 80000, duration: 60 }
+    ];
+
+    let gameState = {
+        totalRevenue: 0,
+        totalCommissions: 0,
+        time: 540, // 09:00 in minutes
+        day: 1,
+        customers: [],
+        selectedTherapist: null
+    };
+
+    // UI ELEMENTS
+    const therapistListEl = document.getElementById('therapist-list');
+    const queueEl = document.getElementById('customer-queue');
+    const revenueEl = document.getElementById('total-revenue');
+    const commsEl = document.getElementById('total-commissions');
+    const timerBox = document.getElementById('timer-box');
+    const reportBody = document.getElementById('report-body');
+
+    // INITIAL RENDER
+    function renderTherapists() {
+        therapistListEl.innerHTML = '';
+        therapists.forEach(t => {
+            const card = document.createElement('div');
+            card.className = `therapist-card ${t.status}`;
+            card.onclick = () => showProfile(t.id);
+            
+            const statusLabel = t.status === 'ready' ? 'SIAP KERJA' : 'SEDANG MELAYANI';
+            const badgeClass = t.status === 'ready' ? 'status-ready' : 'status-busy';
+            
+            card.innerHTML = `
+                <strong>${t.name}</strong><br>
+                <div class="status-badge ${badgeClass}">${statusLabel}</div>
+                <div style="font-size: 0.8rem; margin-top: 5px;">Hasil: Rp ${t.earnings.toLocaleString()}</div>
+            `;
+            therapistListEl.appendChild(card);
+        });
+    }
+
+    function renderQueue() {
+        if (gameState.customers.length === 0) {
+            queueEl.innerHTML = '<p style="text-align: center; color: #999;">Menunggu pelanggan datang...</p>';
+            return;
+        }
+        queueEl.innerHTML = '';
+        gameState.customers.forEach((c, index) => {
+            const div = document.createElement('div');
+            div.className = 'queue-item';
+            div.innerHTML = `
+                <span>Customer #${c.id}</span>
+                <button class="assign-btn" onclick="openAssignment(${index})">PILIH TERAPIS</button>
+            `;
+            queueEl.appendChild(div);
+        });
+    }
+
+    function formatMoney(num) {
+        return "Rp " + num.toLocaleString('id-ID');
+    }
+
+    function updateStats() {
+        revenueEl.innerText = formatMoney(gameState.totalRevenue);
+        commsEl.innerText = formatMoney(gameState.totalCommissions);
+    }
+
+    // GAME LOGIC
+    function gameLoop() {
+        // Progress Time (1 minute every 2 seconds real time)
+        gameState.time += 1;
+        if (gameState.time >= 1320) { // Close at 22:00
+            gameState.time = 540;
+            gameState.day += 1;
+            alert("Hari baru dimulai! " + gameState.day);
+        }
+
+        const hrs = Math.floor(gameState.time / 60);
+        const mins = gameState.time % 60;
+        timerBox.innerText = `HARI ${gameState.day} - ${hrs.toString().padStart(2,'0')}:${mins.toString().padStart(2,'0')}`;
+
+        // Random customer arrival (low chance)
+        if (gameState.customers.length < 5 && Math.random() < 0.05) {
+            gameState.customers.push({ id: Math.floor(Math.random() * 1000) });
+            renderQueue();
+        }
+
+        // Check if therapists finished their job
+        therapists.forEach(t => {
+            if (t.status === 'busy' && t.finishTime <= gameState.time) {
+                t.status = 'ready';
+                renderTherapists();
+            }
+        });
+
+        setTimeout(gameLoop, 1000);
+    }
+
+    // MODAL ACTIONS
+    function openAssignment(customerIndex) {
+        const modal = document.getElementById('assignment-modal');
+        const options = document.getElementById('service-options');
+        options.innerHTML = '<h3>Pilih Terapis Tersedia:</h3>';
+        
+        let availableCount = 0;
+        therapists.forEach(t => {
+            if (t.status === 'ready') {
+                const btn = document.createElement('button');
+                btn.className = 'service-list-btn';
+                btn.innerText = t.name;
+                btn.onclick = () => selectTherapistForService(t.id, customerIndex);
+                options.appendChild(btn);
+                availableCount++;
+            }
+        });
+
+        if (availableCount === 0) {
+            options.innerHTML += '<p style="color:red">Tidak ada terapis yang tersedia saat ini!</p>';
+        }
+
+        modal.style.display = 'flex';
+    }
+
+    function selectTherapistForService(tId, cIdx) {
+        gameState.selectedTherapist = tId;
+        const options = document.getElementById('service-options');
+        options.innerHTML = '<h3>Pilih Layanan:</h3>';
+        
+        services.forEach(s => {
+            const btn = document.createElement('button');
+            btn.className = 'service-list-btn';
+            btn.innerText = `${s.name} - ${formatMoney(s.price)}`;
+            btn.onclick = () => assignJob(tId, s, cIdx);
+            options.appendChild(btn);
+        });
+    }
+
+    function assignJob(tId, service, cIdx) {
+        const therapist = therapists.find(t => t.id === tId);
+        const commission = service.price * 0.4;
+
+        therapist.status = 'busy';
+        therapist.finishTime = gameState.time + service.duration;
+        therapist.earnings += service.price;
+        therapist.commission += commission;
+        therapist.jobs.push({
+            service: service.name,
+            total: service.price,
+            commission: commission,
+            timestamp: timerBox.innerText
+        });
+
+        gameState.totalRevenue += service.price;
+        gameState.totalCommissions += commission;
+        
+        // Add to main report
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td>${therapist.name}</td>
+            <td>${service.name}</td>
+            <td>${formatMoney(service.price)}</td>
+            <td>${formatMoney(commission)}</td>
+        `;
+        reportBody.prepend(row);
+
+        // Cleanup
+        gameState.customers.splice(cIdx, 1);
+        updateStats();
+        renderTherapists();
+        renderQueue();
+        closeModal();
+    }
+
+    function closeModal() {
+        document.getElementById('assignment-modal').style.display = 'none';
+    }
+
+    // RANKING & PROFILE
+    function openRanking() {
+        const modal = document.getElementById('ranking-modal');
+        const list = document.getElementById('ranking-list');
+        list.innerHTML = '';
+
+        const sorted = [...therapists].sort((a, b) => b.earnings - a.earnings);
+        sorted.forEach((t, i) => {
+            const item = document.createElement('div');
+            item.className = 'ranking-item';
+            item.innerHTML = `
+                <span><strong>#${i+1}</strong> ${t.name}</span>
+                <span>${formatMoney(t.earnings)}</span>
+            `;
+            list.appendChild(item);
+        });
+
+        modal.style.display = 'flex';
+    }
+
+    function closeRanking() {
+        document.getElementById('ranking-modal').style.display = 'none';
+    }
+
+    function showProfile(id) {
+        const t = therapists.find(x => x.id === id);
+        const modal = document.getElementById('profile-modal');
+        document.getElementById('profile-name').innerText = `Data Hasil: ${t.name}`;
+        
+        let history = '<h4>Riwayat Kerja:</h4><ul style="font-size:0.9rem; padding-left:20px;">';
+        t.jobs.forEach(j => {
+            history += `<li>${j.service} (${formatMoney(j.total)})</li>`;
+        });
+        history += '</ul>';
+
+        document.getElementById('profile-stats').innerHTML = `
+            <div class="earnings">Total Pendapatan: ${formatMoney(t.earnings)}</div>
+            <div style="text-align:center; margin-bottom:15px;">Hak Komisi (40%): <strong>${formatMoney(t.commission)}</strong></div>
+            <hr>
+            ${history}
+        `;
+
+        document.getElementById('wa-share-btn').onclick = () => shareToWA(t);
+        modal.style.display = 'flex';
+    }
+
+    function closeProfile() {
+        document.getElementById('profile-modal').style.display = 'none';
+    }
+
+    function shareToWA(t) {
+        let text = `*LAPORAN HASIL KERJA - MY SOUL FAMILY REFLEXOLOGY*\n\n`;
+        text += `Nama Terapis: ${t.name}\n`;
+        text += `Total Omset: ${formatMoney(t.earnings)}\n`;
+        text += `*Hak Komisi (40%): ${formatMoney(t.commission)}*\n\n`;
+        text += `_Rincian Layanan:_\n`;
+        
+        t.jobs.forEach((j, i) => {
+            text += `${i+1}. ${j.service} - ${formatMoney(j.total)}\n`;
+        });
+
+        const encoded = encodeURIComponent(text);
+        window.open(`https://wa.me/?text=${encoded}`, '_blank');
+    }
+
+    // Start
+    renderTherapists();
+    updateStats();
+    gameLoop();
+</script>
+
+</body>
+</html>
+
