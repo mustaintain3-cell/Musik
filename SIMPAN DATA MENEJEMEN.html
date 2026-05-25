@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Soul Family Reflexology - Management System</title>
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --secondary: #27ae60;
+            --accent: #e67e22;
+            --light: #ecf0f1;
+            --dark: #34495e;
+            --danger: #e74c3c;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f7f6;
+            margin: 0;
+            padding: 0;
+            color: var(--dark);
+        }
+
+        header {
+            background-color: var(--primary);
+            color: white;
+            padding: 1rem;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 0 15px;
+            padding-bottom: 80px; /* Space for bottom nav */
+        }
+
+        .card {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            margin-bottom: 20px;
+        }
+
+        h2 {
+            margin-top: 0;
+            color: var(--primary);
+            border-bottom: 2px solid var(--light);
+            padding-bottom: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        select, input, button {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+
+        .btn {
+            cursor: pointer;
+            border: none;
+            font-weight: bold;
+            transition: background 0.3s;
+            margin-top: 10px;
+        }
+
+        .btn-primary {
+            background-color: var(--secondary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #219150;
+        }
+
+        .btn-share {
+            background-color: #25D366; /* WhatsApp Color */
+            color: white;
+        }
+
+        .btn-danger {
+            background-color: var(--danger);
+            color: white;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            display: flex;
+            justify-content: space-around;
+            border-top: 1px solid #ddd;
+            padding: 10px 0;
+            box-shadow: 0 -2px 5px rgba(0,0,0,0.05);
+        }
+
+        .nav-item {
+            text-align: center;
+            font-size: 12px;
+            color: #7f8c8d;
+            cursor: pointer;
+            flex: 1;
+        }
+
+        .nav-item.active {
+            color: var(--secondary);
+        }
+
+        .nav-item i {
+            font-size: 20px;
+            display: block;
+            margin-bottom: 2px;
+        }
+
+        /* Tables & Lists */
+        .ranking-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .ranking-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .ranking-item:last-child {
+            border-bottom: none;
+        }
+
+        .badge {
+            background: var(--light);
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 12px;
+        }
+
+        .history-item {
+            border-left: 4px solid var(--secondary);
+            padding: 10px;
+            margin-bottom: 10px;
+            background: #fafafa;
+        }
+
+        .history-details {
+            font-size: 14px;
+            color: #666;
+        }
+
+        .price-summary {
+            background: var(--light);
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 10px;
+        }
+
+        #services-checkboxes {
+            max-height: 200px;
+            overflow-y: auto;
+            border: 1px solid #ddd;
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .checkbox-item input {
+            width: auto;
+            margin-right: 10px;
+        }
+
+        .therapist-report-card {
+            margin-bottom: 25px;
+            border: 1px solid #ddd;
+            padding: 15px;
+            border-radius: 8px;
+        }
+
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>My Soul Family</h1>
+        <small>Reflexology Management</small>
+    </header>
+
+    <div class="container">
+        
+        <!-- Tab: Transaksi -->
+        <div id="tab-transaksi" class="tab-content active">
+            <div class="card">
+                <h2>Input Transaksi Baru</h2>
+                <div class="form-group">
+                    <label>Pilih Terapis</label>
+                    <select id="select-therapist">
+                        <option value="Pak Alam">Pak Alam</option>
+                        <option value="Pak Misdi">Pak Misdi</option>
+                        <option value="Pak Nanang">Pak Nanang</option>
+                        <option value="Pak Hendy">Pak Hendy</option>
+                        <option value="Pak Anto">Pak Anto</option>
+                        <option value="Bu Fukoh">Bu Fukoh</option>
+                        <option value="Bu Denty">Bu Denty</option>
+                        <option value="Bu Linda">Bu Linda</option>
+                        <option value="Bu Siti">Bu Siti</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label>Pilih Layanan</label>
+                    <div id="services-checkboxes">
+                        <!-- Loaded via JS -->
+                    </div>
+                </div>
+
+                <div class="price-summary" id="live-calc">
+                    <strong>Estimasi:</strong><br>
+                    Total: Rp <span id="calc-total">0</span><br>
+                    Komisi (40%): Rp <span id="calc-commission">0</span>
+                </div>
+
+                <button class="btn btn-primary" onclick="saveTransaction()">Simpan Transaksi</button>
+            </div>
+        </div>
+
+        <!-- Tab: Ranking & Laporan -->
+        <div id="tab-ranking" class="tab-content">
+            <div class="card">
+                <h2>Ranking Terapis</h2>
+                <ul id="ranking-list" class="ranking-list">
+                    <!-- Loaded via JS -->
+                </ul>
+            </div>
+
+            <div id="therapist-reports">
+                <!-- Detailed reports generated here -->
+            </div>
+        </div>
+
+        <!-- Tab: Riwayat -->
+        <div id="tab-riwayat" class="tab-content">
+            <div class="card">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <h2>Riwayat Kerja</h2>
+                    <button class="btn btn-danger" style="width: auto; padding: 5px 10px; margin-top: 0;" onclick="clearData()">Hapus Data</button>
+                </div>
+                <div id="history-container">
+                    <!-- Loaded via JS -->
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+        <div class="nav-item active" onclick="switchTab('transaksi', this)">
+            <span style="font-size: 24px;">➕</span><br>Input
+        </div>
+        <div class="nav-item" onclick="switchTab('ranking', this)">
+            <span style="font-size: 24px;">🏆</span><br>Laporan
+        </div>
+        <div class="nav-item" onclick="switchTab('riwayat', this)">
+            <span style="font-size: 24px;">📜</span><br>Riwayat
+        </div>
+    </nav>
+
+    <script>
+        const SERVICES = [
+            { id: 1, name: "Refleksi Fullbody 90 mnt", price: 140000 },
+            { id: 2, name: "Refleksi Fullbody 120 mnt", price: 170000 },
+            { id: 3, name: "Fullbody 60 mnt", price: 105000 },
+            { id: 4, name: "Fullbody 90 mnt", price: 130000 },
+            { id: 5, name: "Fullbody 120 mnt", price: 165000 },
+            { id: 6, name: "Sport massage 60 mnt", price: 125000 },
+            { id: 7, name: "Sport massage 90 mnt", price: 150000 },
+            { id: 8, name: "Sport massage 120 mnt", price: 185000 },
+            { id: 9, name: "Bekam basah", price: 100000 },
+            { id: 10, name: "Kop kering", price: 50000 },
+            { id: 11, name: "Totok wajah Viva 30 mnt", price: 50000 },
+            { id: 12, name: "Totok wajah zaethun 15 mnt", price: 35000 },
+            { id: 13, name: "Kerokan", price: 35000 },
+            { id: 14, name: "Luluran fullbody", price: 80000 }
+        ];
+
+        const THERAPISTS = [
+            "Pak Alam", "Pak Misdi", "Pak Nanang", "Pak hendy", "Pak Anto", 
+            "Bu Fukoh", "Bu denty", "Bu Linda", "Bu Siti"
+        ];
+
+        let history = JSON.parse(localStorage.getItem('soul_family_history')) || [];
+
+        // Initialization
+        function init() {
+            renderServices();
+            updateAll();
+        }
+
+        function renderServices() {
+            const container = document.getElementById('services-checkboxes');
+            container.innerHTML = SERVICES.map(s => `
+                <div class="checkbox-item">
+                    <input type="checkbox" value="${s.id}" data-price="${s.price}" id="svc-${s.id}" onchange="calculateLive()">
+                    <label for="svc-${s.id}">${s.name} - Rp ${s.price.toLocaleString('id-ID')}</label>
+                </div>
+            `).join('');
+        }
+
+        function calculateLive() {
+            let total = 0;
+            document.querySelectorAll('#services-checkboxes input:checked').forEach(cb => {
+                total += parseInt(cb.dataset.price);
+            });
+            document.getElementById('calc-total').innerText = total.toLocaleString('id-ID');
+            document.getElementById('calc-commission').innerText = (total * 0.4).toLocaleString('id-ID');
+        }
+
+        function saveTransaction() {
+            const therapist = document.getElementById('select-therapist').value;
+            const selectedServices = [];
+            let total = 0;
+
+            document.querySelectorAll('#services-checkboxes input:checked').forEach(cb => {
+                const svc = SERVICES.find(s => s.id == cb.value);
+                selectedServices.push(svc.name);
+                total += svc.price;
+            });
+
+            if (selectedServices.length === 0) {
+                alert("Pilih minimal satu layanan!");
+                return;
+            }
+
+            const transaction = {
+                id: Date.now(),
+                timestamp: new Date().toLocaleString('id-ID'),
+                therapist: therapist,
+                services: selectedServices,
+                total: total,
+                commission: total * 0.4
+            };
+
+            history.unshift(transaction);
+            localStorage.setItem('soul_family_history', JSON.stringify(history));
+
+            // Reset form
+            document.querySelectorAll('#services-checkboxes input').forEach(cb => cb.checked = false);
+            calculateLive();
+            
+            alert("Transaksi Berhasil Disimpan!");
+            updateAll();
+        }
+
+        function updateAll() {
+            renderRanking();
+            renderHistory();
+            renderDetailedReports();
+        }
+
+        function renderRanking() {
+            const stats = {};
+            THERAPISTS.forEach(t => stats[t] = 0);
+
+            history.forEach(item => {
+                if (stats[item.therapist] !== undefined) {
+                    stats[item.therapist] += item.total;
+                }
+            });
+
+            const sorted = Object.keys(stats)
+                .map(name => ({ name, revenue: stats[name] }))
+                .sort((a, b) => b.revenue - a.revenue);
+
+            const list = document.getElementById('ranking-list');
+            list.innerHTML = sorted.map((s, idx) => `
+                <li class="ranking-item">
+                    <span><strong>#${idx + 1}</strong> ${s.name}</span>
+                    <span class="badge">Omzet: Rp ${s.revenue.toLocaleString('id-ID')}</span>
+                </li>
+            `).join('');
+        }
+
+        function renderHistory() {
+            const container = document.getElementById('history-container');
+            if (history.length === 0) {
+                container.innerHTML = "<p style='text-align:center;'>Belum ada riwayat.</p>";
+                return;
+            }
+
+            container.innerHTML = history.map(item => `
+                <div class="history-item">
+                    <strong>${item.therapist}</strong> - <small>${item.timestamp}</small><br>
+                    <div class="history-details">
+                        Layanan: ${item.services.join(', ')}<br>
+                        Total: Rp ${item.total.toLocaleString('id-ID')} | Komisi: Rp ${item.commission.toLocaleString('id-ID')}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function renderDetailedReports() {
+            const container = document.getElementById('therapist-reports');
+            container.innerHTML = "<h2>Laporan Per Terapis</h2>";
+
+            THERAPISTS.forEach(name => {
+                const jobs = history.filter(h => h.therapist === name);
+                if (jobs.length === 0) return;
+
+                const totalRev = jobs.reduce((sum, j) => sum + j.total, 0);
+                const totalComm = jobs.reduce((sum, j) => sum + j.commission, 0);
+
+                const reportDiv = document.createElement('div');
+                reportDiv.className = 'card therapist-report-card';
+                reportDiv.innerHTML = `
+                    <h3>${name}</h3>
+                    <p>Total Pekerjaan: ${jobs.length}</p>
+                    <p>Total Omzet: Rp ${totalRev.toLocaleString('id-ID')}</p>
+                    <p><strong>Komisi Anda (40%): Rp ${totalComm.toLocaleString('id-ID')}</strong></p>
+                    <button class="btn btn-share" onclick="shareToWhatsApp('${name}', ${totalRev}, ${totalComm}, ${jobs.length})">Bagikan ke WhatsApp</button>
+                `;
+                container.appendChild(reportDiv);
+            });
+        }
+
+        function shareToWhatsApp(name, revenue, commission, count) {
+            const message = `*Laporan Kerja My Soul Family Reflexology*\n\n` +
+                            `Nama Terapis: *${name}*\n` +
+                            `Jumlah Job: ${count}\n` +
+                            `Total Omzet: Rp ${revenue.toLocaleString('id-ID')}\n` +
+                            `*Total Komisi (40%): Rp ${commission.toLocaleString('id-ID')}*\n\n` +
+                            `_Terhitung pada: ${new Date().toLocaleString('id-ID')}_`;
+            
+            const url = `https://wa.me/?text=${encodeURIComponent(message)}`;
+            window.open(url, '_blank');
+        }
+
+        function switchTab(tabId, el) {
+            // Update active content
+            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+            document.getElementById('tab-' + tabId).classList.add('active');
+
+            // Update bottom nav style
+            document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+            el.classList.add('active');
+        }
+
+        function clearData() {
+            if (confirm("Apakah Anda yakin ingin menghapus SEMUA data riwayat?")) {
+                localStorage.removeItem('soul_family_history');
+                history = [];
+                updateAll();
+                alert("Data telah dihapus.");
+            }
+        }
+
+        window.onload = init;
+    </script>
+</body>
+</html>
+
