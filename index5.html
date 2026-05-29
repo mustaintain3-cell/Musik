@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Soul Family Reflexology - Game Management</title>
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --secondary: #2980b9;
+            --accent: #27ae60;
+            --danger: #e74c3c;
+            --light: #ecf0f1;
+            --dark: #34495e;
+            --gold: #f1c40f;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f7f6;
+            color: var(--dark);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 900px;
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: var(--primary);
+            margin-bottom: 20px;
+            border-bottom: 3px solid var(--secondary);
+            padding-bottom: 10px;
+        }
+
+        .section {
+            margin-bottom: 30px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+        }
+
+        .section-title {
+            font-weight: bold;
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            color: var(--secondary);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        /* Therapists Rolling List */
+        .therapist-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .therapist-item {
+            display: flex;
+            align-items: center;
+            background: var(--light);
+            margin-bottom: 8px;
+            padding: 10px 15px;
+            border-radius: 5px;
+            border-left: 5px solid var(--secondary);
+        }
+
+        .therapist-item span {
+            flex-grow: 1;
+            font-weight: 600;
+        }
+
+        .controls button {
+            cursor: pointer;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 3px;
+            margin-left: 5px;
+            transition: 0.2s;
+        }
+
+        .btn-up { background: #95a5a6; color: white; }
+        .btn-down { background: #7f8c8d; color: white; }
+        .btn-action { background: var(--accent); color: white; padding: 8px 15px !important; font-weight: bold; }
+
+        /* Form Styling */
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 0.9rem;
+        }
+
+        select, input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+
+        /* Reports Table */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+            font-size: 0.9rem;
+        }
+
+        th, td {
+            text-align: left;
+            padding: 12px;
+            border-bottom: 1px solid #eee;
+        }
+
+        th {
+            background-color: var(--secondary);
+            color: white;
+        }
+
+        tr:hover { background-color: #f9f9f9; }
+
+        .ranking-badge {
+            background: var(--gold);
+            color: var(--dark);
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-weight: bold;
+            font-size: 0.8rem;
+        }
+
+        /* Buttons */
+        .btn-full {
+            width: 100%;
+            padding: 12px;
+            background-color: var(--secondary);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .btn-full:hover { background-color: var(--primary); }
+
+        .btn-danger { background-color: var(--danger); }
+
+        .history-item {
+            font-size: 0.85rem;
+            padding: 8px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        /* Mobile optimization */
+        @media (max-width: 600px) {
+            th, td { padding: 8px; font-size: 0.8rem; }
+            .container { padding: 10px; }
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: 15% auto;
+            padding: 20px;
+            width: 80%;
+            max-width: 500px;
+            border-radius: 10px;
+        }
+
+        .share-btn {
+            background-color: #25D366;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 0.8rem;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>My Soul Family Reflexology</h1>
+
+    <!-- 1. Therapist Rolling Management -->
+    <div class="section">
+        <div class="section-title">
+            <span>Antrean Terapis (Rolling)</span>
+            <span style="font-size: 0.8rem; color: #666;">*Urutan teratas adalah giliran berikutnya</span>
+        </div>
+        <ul id="therapistList" class="therapist-list">
+            <!-- Rendered by JS -->
+        </ul>
+    </div>
+
+    <!-- 2. Transaction Form -->
+    <div class="section">
+        <div class="section-title">Input Order Baru</div>
+        <div class="form-group">
+            <label>Pilih Layanan</label>
+            <select id="serviceSelect">
+                <!-- Services populated by JS -->
+            </select>
+        </div>
+        <div class="form-group">
+            <label>Terapis (Otomatis urutan #1)</label>
+            <select id="therapistSelect">
+                <option value="auto">Ikuti Urutan Antrean (#1)</option>
+                <!-- Specific therapist options will be added by JS for 'Request' -->
+            </select>
+        </div>
+        <div class="form-group">
+            <label>Uang Bonus (Opsional)</label>
+            <input type="number" id="bonusInput" placeholder="Masukkan jumlah bonus (cth: 10000)">
+        </div>
+        <button class="btn-full btn-action" onclick="submitOrder()">Mulai Kerja & Simpan</button>
+    </div>
+
+    <!-- 3. Performance & Ranking -->
+    <div class="section">
+        <div class="section-title">Laporan Kerja & Rangking</div>
+        <div style="overflow-x: auto;">
+            <table id="reportTable">
+                <thead>
+                    <tr>
+                        <th>Nama</th>
+                        <th>Pasien</th>
+                        <th>Total Rp</th>
+                        <th>Komisi (40%)</th>
+                        <th>Bonus</th>
+                        <th>Aksi</th>
+                    </tr>
+                </thead>
+                <tbody id="reportTableBody">
+                    <!-- Population by JS -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- 4. History -->
+    <div class="section">
+        <div class="section-title">
+            <span>Riwayat Kerja Terakhir</span>
+            <button class="btn-up" onclick="clearData()" style="font-size: 0.7rem; padding: 2px 5px;">Hapus Semua Data</button>
+        </div>
+        <div id="historyLog" style="max-height: 200px; overflow-y: auto;">
+            <!-- History entries -->
+        </div>
+    </div>
+</div>
+
+<script>
+    // Data Configuration
+    const services = [
+        { id: 1, name: "Refleksi Fullbody 90 mnt", price: 140000 },
+        { id: 2, name: "Refleksi Fullbody 120 mnt", price: 170000 },
+        { id: 3, name: "Fullbody 60 mnt", price: 105000 },
+        { id: 4, name: "Fullbody 90 mnt", price: 130000 },
+        { id: 5, name: "Fullbody 120 mnt", price: 165000 },
+        { id: 6, name: "Sport Message 60 mnt", price: 125000 },
+        { id: 7, name: "Sport Message 90 mnt", price: 150000 },
+        { id: 8, name: "Sport Message 120 mnt", price: 185000 },
+        { id: 9, name: "Bekam Basah", price: 100000 },
+        { id: 10, name: "Kop Kering", price: 50000 },
+        { id: 11, name: "Totok Wajah Viva 30 mnt", price: 50000 },
+        { id: 12, name: "Totok Wajah Zaethun 15 mnt", price: 35000 },
+        { id: 13, name: "Kerokan", price: 35000 },
+        { id: 14, name: "Luluran Fullbody", price: 80000 }
+    ];
+
+    const initialTherapists = [
+        "Pak Alam", "Pak Misdi", "Pak Nanang", "Pak hendy", "Pak Anto", 
+        "Bu Fukoh", "Bu denty", "Bu Linda", "Bu Siti"
+    ];
+
+    let state = {
+        therapistsQueue: [...initialTherapists],
+        stats: {}, // { "Name": { sessions: 0, revenue: 0, commission: 0, bonus: 0 } }
+        history: [] // Array of { timestamp, name, service, price, commission, bonus }
+    };
+
+    // Load LocalStorage
+    function init() {
+        const savedData = localStorage.getItem('soulFamilyData');
+        if (savedData) {
+            state = JSON.parse(savedData);
+        } else {
+            // Setup stats for all therapists
+            initialTherapists.forEach(name => {
+                state.stats[name] = { sessions: 0, revenue: 0, commission: 0, bonus: 0 };
+            });
+        }
+        renderQueue();
+        renderServiceOptions();
+        renderReport();
+        renderHistory();
+        updateTherapistSelection();
+    }
+
+    function saveData() {
+        localStorage.setItem('soulFamilyData', JSON.stringify(state));
+    }
+
+    // UI Rendering
+    function renderQueue() {
+        const list = document.getElementById('therapistList');
+        list.innerHTML = '';
+        state.therapistsQueue.forEach((name, index) => {
+            const li = document.createElement('li');
+            li.className = 'therapist-item';
+            li.innerHTML = `
+                <span style="width: 30px; font-size: 0.8rem; color: #888;">#${index+1}</span>
+                <span>${name}</span>
+                <div class="controls">
+                    <button class="btn-up" onclick="moveTherapist(${index}, -1)">▲</button>
+                    <button class="btn-down" onclick="moveTherapist(${index}, 1)">▼</button>
+                </div>
+            `;
+            list.appendChild(li);
+        });
+    }
+
+    function renderServiceOptions() {
+        const select = document.getElementById('serviceSelect');
+        services.forEach(s => {
+            const opt = document.createElement('option');
+            opt.value = s.id;
+            opt.textContent = `${s.name} - Rp ${s.price.toLocaleString()}`;
+            select.appendChild(opt);
+        });
+    }
+
+    function updateTherapistSelection() {
+        const select = document.getElementById('therapistSelect');
+        // Keep the "auto" option
+        select.innerHTML = '<option value="auto">Ikuti Urutan Antrean (#1)</option>';
+        state.therapistsQueue.forEach(name => {
+            const opt = document.createElement('option');
+            opt.value = name;
+            opt.textContent = `Request: ${name}`;
+            select.appendChild(opt);
+        });
+    }
+
+    function renderReport() {
+        const body = document.getElementById('reportTableBody');
+        body.innerHTML = '';
+
+        // Sort therapists for ranking by Revenue or Sessions
+        const sorted = Object.keys(state.stats).sort((a, b) => {
+            return state.stats[b].revenue - state.stats[a].revenue;
+        });
+
+        sorted.forEach((name, idx) => {
+            const s = state.stats[name];
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td>
+                    ${idx < 3 ? '<span class="ranking-badge">#' + (idx+1) + '</span> ' : ''}
+                    ${name}
+                </td>
+                <td>${s.sessions}</td>
+                <td>Rp ${s.revenue.toLocaleString()}</td>
+                <td>Rp ${s.commission.toLocaleString()}</td>
+                <td>Rp ${s.bonus.toLocaleString()}</td>
+                <td>
+                    <button class="share-btn" onclick="shareToWA('${name}')">Share WA</button>
+                </td>
+            `;
+            body.appendChild(tr);
+        });
+    }
+
+    function renderHistory() {
+        const log = document.getElementById('historyLog');
+        log.innerHTML = '';
+        state.history.slice().reverse().forEach(h => {
+            const div = document.createElement('div');
+            div.className = 'history-item';
+            div.innerHTML = `
+                <div>
+                    <strong>${h.name}</strong> - ${h.service}<br>
+                    <small>${h.timestamp}</small>
+                </div>
+                <div style="text-align: right">
+                    Rp ${(h.price + h.bonus).toLocaleString()}<br>
+                    <span style="color: green; font-size: 0.75rem;">(Me: Rp ${h.commission.toLocaleString()})</span>
+                </div>
+            `;
+            log.appendChild(div);
+        });
+    }
+
+    // Business Logic
+    function moveTherapist(index, direction) {
+        const newIndex = index + direction;
+        if (newIndex >= 0 && newIndex < state.therapistsQueue.length) {
+            const arr = state.therapistsQueue;
+            [arr[index], arr[newIndex]] = [arr[newIndex], arr[index]];
+            renderQueue();
+            updateTherapistSelection();
+            saveData();
+        }
+    }
+
+    function submitOrder() {
+        const serviceId = parseInt(document.getElementById('serviceSelect').value);
+        const therapistVal = document.getElementById('therapistSelect').value;
+        const bonus = parseInt(document.getElementById('bonusInput').value) || 0;
+
+        const service = services.find(s => s.id === serviceId);
+        let therapistName;
+
+        if (therapistVal === 'auto') {
+            // Get the person at top of queue
+            therapistName = state.therapistsQueue[0];
+            // Move them to the end
+            state.therapistsQueue.push(state.therapistsQueue.shift());
+        } else {
+            // Request: pull them out of their current position and move to end
+            therapistName = therapistVal;
+            const idx = state.therapistsQueue.indexOf(therapistName);
+            state.therapistsQueue.splice(idx, 1);
+            state.therapistsQueue.push(therapistName);
+        }
+
+        const commission = service.price * 0.4;
+
+        // Update Stats
+        const stats = state.stats[therapistName];
+        stats.sessions += 1;
+        stats.revenue += service.price;
+        stats.commission += commission;
+        stats.bonus += bonus;
+
+        // Add to History
+        const now = new Date();
+        const timestamp = now.toLocaleDateString() + ' ' + now.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+        
+        state.history.push({
+            timestamp,
+            name: therapistName,
+            service: service.name,
+            price: service.price,
+            commission: commission,
+            bonus: bonus
+        });
+
+        // Reset inputs
+        document.getElementById('bonusInput').value = '';
+        
+        // Refresh UI
+        renderQueue();
+        updateTherapistSelection();
+        renderReport();
+        renderHistory();
+        saveData();
+
+        alert(`Input Berhasil! ${therapistName} mulai mengerjakan ${service.name}.`);
+    }
+
+    function shareToWA(name) {
+        const s = state.stats[name];
+        const dateStr = new Date().toLocaleDateString();
+        const text = `LAPORAN KERJA TERAPIS\n-----------------------\nNama: ${name}\nTanggal: ${dateStr}\nTotal Pasien: ${s.sessions}\nTotal Pendapatan: Rp ${s.revenue.toLocaleString()}\nKomisi (40%): Rp ${s.commission.toLocaleString()}\nUang Bonus: Rp ${s.bonus.toLocaleString()}\n-----------------------\nTerima kasih atas kerja kerasnya!`;
+        
+        const encoded = encodeURIComponent(text);
+        window.open(`https://wa.me/?text=${encoded}`, '_blank');
+    }
+
+    function clearData() {
+        if (confirm('Apakah Anda yakin ingin menghapus SEMUA riwayat dan statistik? Data tidak bisa dikembalikan.')) {
+            localStorage.removeItem('soulFamilyData');
+            location.reload();
+        }
+    }
+
+    // Entry point
+    init();
+
+</script>
+
+</body>
+</html>
