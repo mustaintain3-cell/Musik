@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login ALAMTERAPY</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Outfit & Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@300;600;800&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            primary: '#10b981', // Emerald
+                            accent: '#8b5cf6',  // Violet
+                            dark: '#0f172a',    // Deep Slate
+                            surface: 'rgba(255, 255, 255, 0.7)',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        display: ['Outfit', 'sans-serif'],
+                    },
+                    animation: {
+                        'fade-up': 'fadeUp 0.6s ease-out forwards',
+                        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                    },
+                    keyframes: {
+                        fadeUp: {
+                            '0%': { opacity: '0', transform: 'translateY(20px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background: radial-gradient(circle at top right, #1e293b, #0f172a);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow-x: hidden;
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+
+        .input-glow:focus {
+            box-shadow: 0 0 15px rgba(16, 185, 129, 0.3);
+            border-color: #10b981;
+        }
+
+        /* Ambient Background elements */
+        .blob {
+            position: absolute;
+            width: 400px;
+            height: 400px;
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(139, 92, 246, 0.15));
+            filter: blur(80px);
+            border-radius: 50%;
+            z-index: -1;
+        }
+    </style>
+</head>
+<body class="antialiased text-slate-200">
+
+    <!-- Background Blobs -->
+    <div class="blob top-0 -left-20 animate-pulse-slow"></div>
+    <div class="blob bottom-0 -right-20 animate-pulse-slow" style="animation-delay: 2s;"></div>
+
+    <main class="w-full max-w-md px-6 py-12 animate-fade-up">
+        
+        <!-- Header Branding -->
+        <header class="text-center mb-10">
+            <div class="inline-block p-3 rounded-2xl bg-brand-primary/10 border border-brand-primary/20 mb-4">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-brand-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m12.728 0l-.707-.707M6.343 6.343l-.707-.707m9.172 9.172L15 12m-3 3l-3-3m3-3l-3 3" />
+                </svg>
+            </div>
+            <h1 class="font-display text-4xl font-extrabold tracking-tight text-white mb-2">
+                ALAM<span class="text-brand-primary">TERAPY</span>
+            </h1>
+            <p class="text-slate-400 font-sans text-sm tracking-wide uppercase">Portal Akses Premium</p>
+        </header>
+
+        <!-- Login Card -->
+        <div class="glass-card rounded-3xl p-8 md:p-10 transition-all duration-300 hover:border-brand-primary/30">
+            <form onsubmit="event.preventDefault();" class="space-y-6">
+                <!-- Email Field -->
+                <div class="space-y-2">
+                    <label for="email" class="text-xs font-semibold text-slate-400 uppercase tracking-widest ml-1">Email Address</label>
+                    <input 
+                        type="email" 
+                        id="email" 
+                        placeholder="nama@email.com" 
+                        class="w-full bg-slate-900/50 border border-slate-700 rounded-xl px-4 py-4 text-white placeholder-slate-500 transition-all outline-none input-glow"
+                        required
+                    >
+                </div>
+
+                <!-- Password Field -->
+                <div class="space-y-2">
+                    <label for="password" class="text-xs font-semibold text-slate-400 uppercase tracking-widest ml-1">Password</label>
+                    <input 
+                        type="password" 
+                        id="password" 
+                        placeholder="••••••••" 
+                        class="w-full bg-slate-900/50 border border-slate-700 rounded-xl px-4 py-4 text-white placeholder-slate-500 transition-all outline-none input-glow"
+                        required
+                    >
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="pt-4 space-y-4">
+                    <button 
+                        onclick="login()" 
+                        class="group relative w-full bg-brand-primary hover:bg-emerald-400 text-brand-dark font-bold py-4 rounded-xl transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98] shadow-lg shadow-brand-primary/20"
+                    >
+                        <span>Masuk Sekarang</span>
+                        <div class="absolute inset-0 rounded-xl bg-white/20 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                    </button>
+
+                    <div class="flex items-center gap-4 py-2">
+                        <div class="h-[1px] flex-1 bg-slate-800"></div>
+                        <span class="text-xs text-slate-500 font-medium">ATAU</span>
+                        <div class="h-[1px] flex-1 bg-slate-800"></div>
+                    </div>
+
+                    <button 
+                        onclick="daftar()" 
+                        class="w-full bg-transparent border border-slate-700 hover:border-brand-accent text-slate-300 hover:text-white font-medium py-3 rounded-xl transition-all duration-300 flex items-center justify-center gap-2"
+                    >
+                        Buat Akun Baru
+                    </button>
+                </div>
+            </form>
+
+            <!-- Status Feedback Area -->
+            <div id="status" class="mt-6 text-sm text-center min-h-[1.5rem] transition-all duration-300">
+                <!-- Status messages will appear here -->
+            </div>
+        </div>
+
+        <!-- System Footer (Non-legal, Feature-oriented) -->
+        <div class="mt-12 text-center">
+            <p class="text-slate-500 text-xs tracking-wider">SECURED BY FIREBASE PROTOCOL</p>
+        </div>
+    </main>
+
+    <!-- Firebase SDK (v8.10.0) -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase.js"></script>
+
+    <script>
+        // Firebase Configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyAYG9MhzNiYKUy8XdmYmKWIH-kMUpxvGzk",
+            authDomain: "alamterapi1.firebaseapp.com",
+            databaseURL: "https://alamterapi1-default-rtdb.firebaseio.com",
+            projectId: "alamterapi1",
+            storageBucket: "alamterapi1.firebasestorage.app",
+            messagingSenderId: "733767845112",
+            appId: "1:733767845112:web:6002f2b9884c33b0fde70d",
+            measurementId: "G-LP3LTWJ9TX"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+
+        const statusEl = document.getElementById("status");
+
+        // UI Feedback Helper
+        function showMessage(msg, isError = false) {
+            statusEl.innerHTML = msg;
+            statusEl.className = `mt-6 text-sm text-center transition-all duration-300 ${isError ? 'text-rose-400' : 'text-emerald-400'}`;
+            
+            // Clear error message after 5 seconds
+            if (isError) {
+                setTimeout(() => {
+                    statusEl.style.opacity = '0';
+                    setTimeout(() => { statusEl.innerHTML = ''; statusEl.style.opacity = '1'; }, 300);
+                }, 5000);
+            }
+        }
+
+        // Auto Login Redirect
+        firebase.auth().onAuthStateChanged(function(user) {
+            if (user) {
+                showMessage("✅ Mengalihkan ke Dashboard...");
+                setTimeout(() => {
+                    window.location.href = "dashboard.html";
+                }, 1000);
+            }
+        });
+
+        // Register Function
+        function daftar() {
+            const email = document.getElementById("email").value;
+            const password = document.getElementById("password").value;
+
+            if (!email || !password) {
+                showMessage("Harap isi email dan password.", true);
+                return;
+            }
+
+            showMessage("<span class='animate-pulse'>Mendaftarkan akun...</span>");
+
+            firebase.auth().createUserWithEmailAndPassword(email, password)
+                .then((userCredential) => {
+                    showMessage("✅ Berhasil daftar! Silakan masuk.");
+                })
+                .catch((error) => {
+                    showMessage(`❌ Error: ${error.message}`, true);
+                });
+        }
+
+        // Login Function
+        function login() {
+            const email = document.getElementById("email").value;
+            const password = document.getElementById("password").value;
+
+            if (!email || !password) {
+                showMessage("Harap isi email dan password.", true);
+                return;
+            }
+
+            showMessage("<span class='animate-pulse'>Mengautentikasi...</span>");
+
+            firebase.auth().signInWithEmailAndPassword(email, password)
+                .then((userCredential) => {
+                    showMessage("✅ Login Berhasil!");
+                    // onAuthStateChanged handles the redirect
+                })
+                .catch((error) => {
+                    showMessage(`❌ Error: ${error.message}`, true);
+                });
+        }
+    </script>
+</body>
+</html>
+
