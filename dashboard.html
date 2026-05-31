@@ -1,37 +1,37 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
+<html lang="id" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard ALAM TERAPY | Premium Wellness Management</title>
+    <title>Dashboard | ALAMTERAPY</title>
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Inter & Outfit -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Outfit:wght@500;700;800&display=swap" rel="stylesheet">
+    
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     colors: {
                         slate: {
-                            950: '#020617',
+                            950: '#0f172a',
                         },
                         emerald: {
                             400: '#34d399',
                             500: '#10b981',
                             600: '#059669',
                         },
-                        violet: {
-                            500: '#8b5cf6',
-                        }
                     },
                     fontFamily: {
-                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
                         display: ['Outfit', 'sans-serif'],
                     },
                     animation: {
-                        'fade-in-up': 'fadeInUp 0.6s ease-out forwards',
-                        'float': 'float 3s ease-in-out infinite',
+                        'fade-in-up': 'fadeInUp 0.8s ease-out forwards',
+                        'float': 'float 6s ease-in-out infinite',
                     },
                     keyframes: {
                         fadeInUp: {
@@ -40,256 +40,290 @@
                         },
                         float: {
                             '0%, 100%': { transform: 'translateY(0)' },
-                            '50%': { transform: 'translateY(-10px)' },
+                            '50%': { transform: 'translateY(-20px)' },
                         }
                     }
                 }
             }
         }
     </script>
-    <style>
-        body {
-            background-color: #0f172a;
-            color: #f1f5f9;
-            overflow-x: hidden;
-        }
 
-        .glass-header {
-            background: rgba(15, 23, 42, 0.8);
-            backdrop-filter: blur(12px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    <style type="text/tailwindcss">
+        @layer base {
+            body {
+                @apply bg-slate-950 text-slate-200 antialiased selection:bg-emerald-500/30 selection:text-emerald-400;
+            }
         }
 
         .glass-card {
-            background: rgba(30, 41, 59, 0.5);
-            backdrop-filter: blur(8px);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            @apply bg-white/5 backdrop-blur-lg border border-white/10 rounded-3xl;
         }
 
-        .glass-card:hover {
-            background: rgba(30, 41, 59, 0.8);
-            border-color: rgba(16, 185, 129, 0.3);
-            transform: translateY(-8px) scale(1.01);
-            box-shadow: 0 20px 40px -20px rgba(0, 0, 0, 0.5);
+        .glass-header {
+            @apply bg-slate-950/80 backdrop-blur-md border-b border-white/5 sticky top-0 z-50;
         }
 
-        .hero-gradient {
-            background: radial-gradient(circle at 50% 50%, rgba(16, 185, 129, 0.15) 0%, rgba(15, 23, 42, 0) 70%);
+        .text-gradient {
+            @apply bg-clip-text text-transparent bg-gradient-to-r from-emerald-400 to-teal-400;
         }
 
-        .custom-scrollbar::-webkit-scrollbar {
-            width: 6px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-track {
-            background: #0f172a;
-        }
-        .custom-scrollbar::-webkit-scrollbar-thumb {
-            background: #334155;
-            border-radius: 10px;
+        .btn-primary {
+            @apply relative overflow-hidden px-8 py-3 rounded-full font-bold transition-all duration-300 transform hover:scale-105 active:scale-95 bg-emerald-500 text-slate-950 hover:bg-emerald-400 shadow-[0_0_20px_rgba(16,185,129,0.3)];
         }
 
-        .stagger-1 { animation-delay: 0.1s; }
-        .stagger-2 { animation-delay: 0.2s; }
-        .stagger-3 { animation-delay: 0.3s; }
-        .stagger-4 { animation-delay: 0.4s; }
-        .stagger-5 { animation-delay: 0.5s; }
+        .btn-outline {
+            @apply px-8 py-3 rounded-full font-semibold border border-white/20 transition-all duration-300 hover:bg-white/10 hover:border-white/40;
+        }
+
+        .feature-card {
+            @apply p-8 glass-card transition-all duration-500 hover:-translate-y-2 hover:bg-white/10 hover:border-emerald-500/30;
+        }
+
+        /* Hide scrollbar for Chrome, Safari and Opera */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        /* Hide scrollbar for IE, Edge and Firefox */
+        .no-scrollbar {
+            -ms-overflow-style: none;  /* IE and Edge */
+            scrollbar-width: none;  /* Firefox */
+        }
     </style>
 </head>
-<body class="custom-scrollbar font-sans">
+<body class="no-scrollbar">
 
-    <!-- NAVIGATION -->
-    <nav class="glass-header fixed top-0 w-full z-50 px-6 py-4">
-        <div class="max-w-7xl mx-auto flex justify-between items-center">
+    <!-- Header & Navigation -->
+    <header class="glass-header">
+        <nav class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
             <div class="flex items-center gap-2">
                 <div class="w-10 h-10 bg-emerald-500 rounded-xl flex items-center justify-center shadow-lg shadow-emerald-500/20">
-                    <span class="text-xl">🌿</span>
+                    <span class="text-slate-950 font-display font-extrabold text-xl">A</span>
                 </div>
-                <span class="text-xl font-display font-bold tracking-tight bg-gradient-to-r from-white to-slate-400 bg-clip-text text-transparent">
-                    ALAM TERAPY
-                </span>
+                <span class="font-display font-bold text-xl tracking-tight text-white">ALAMTERAPY</span>
             </div>
             
-            <!-- Desktop Menu -->
-            <div class="hidden md:flex items-center gap-8 text-sm font-medium text-slate-400">
-                <a href="#" class="hover:text-emerald-400 transition-colors">Dashboard</a>
-                <a href="#" class="hover:text-emerald-400 transition-colors">Analytics</a>
-                <a href="#" class="hover:text-emerald-400 transition-colors">Management</a>
-                <button class="bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 px-5 py-2 rounded-full border border-emerald-500/20 transition-all">
-                    Premium Access
+            <div class="hidden md:flex items-center gap-8">
+                <a href="#home" class="text-sm font-medium hover:text-emerald-400 transition-colors">Beranda</a>
+                <a href="#features" class="text-sm font-medium hover:text-emerald-400 transition-colors">Fitur</a>
+                <a href="#session" class="text-sm font-medium hover:text-emerald-400 transition-colors">Sesi Terapi</a>
+                <button onclick="logout()" class="px-6 py-2 rounded-full border border-emerald-500/30 text-emerald-400 text-sm font-semibold hover:bg-emerald-500 hover:text-slate-950 transition-all">
+                    LOGOUT
                 </button>
             </div>
 
-            <!-- Mobile Toggle -->
-            <button class="md:hidden text-white" onclick="toggleMobileMenu()">
+            <!-- Mobile Menu Button -->
+            <button class="md:hidden text-white" id="mobile-menu-btn">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
                 </svg>
             </button>
-        </div>
-    </nav>
+        </nav>
+    </header>
 
-    <!-- MOBILE MENU OVERLAY -->
-    <div id="mobileMenu" class="fixed inset-0 bg-slate-950 z-[60] flex flex-col p-8 translate-x-full transition-transform duration-300 md:hidden">
-        <div class="flex justify-between items-center mb-12">
-            <span class="font-display font-bold text-xl">MENU</span>
-            <button onclick="toggleMobileMenu()" class="text-slate-400 uppercase text-xs tracking-widest">Close</button>
-        </div>
-        <div class="flex flex-col gap-6 text-2xl font-display font-semibold">
-            <a href="#" class="text-emerald-400">Dashboard</a>
-            <a href="#">Schedules</a>
-            <a href="#">Customers</a>
-            <a href="#">Settings</a>
-            <div class="mt-8">
-                <a href="index.html" class="text-red-400">Sign Out</a>
-            </div>
-        </div>
+    <!-- Mobile Navigation Overlay -->
+    <div id="mobile-menu" class="fixed inset-0 z-40 bg-slate-950/95 backdrop-blur-xl hidden flex-col items-center justify-center gap-8 md:hidden">
+        <a href="#home" class="text-2xl font-display font-bold text-white">Beranda</a>
+        <a href="#features" class="text-2xl font-display font-bold text-white">Fitur</a>
+        <a href="#session" class="text-2xl font-display font-bold text-white">Sesi Terapi</a>
+        <button onclick="logout()" class="btn-primary mt-4">LOGOUT</button>
+        <button id="close-menu" class="absolute top-8 right-8 text-white">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+        </button>
     </div>
 
-    <!-- MAIN CONTENT -->
-    <main class="relative pt-32 pb-20 px-6">
-        <!-- Hero Decorative Background -->
-        <div class="hero-gradient absolute top-0 left-1/2 -translate-x-1/2 w-full h-[600px] pointer-events-none -z-10"></div>
+    <main>
+        <!-- Hero Section -->
+        <section id="home" class="relative min-h-[85vh] flex items-center justify-center overflow-hidden px-6 pt-20">
+            <!-- Background Decorative Elements -->
+            <div class="absolute top-1/4 -left-20 w-96 h-96 bg-emerald-500/10 rounded-full blur-[120px] animate-float"></div>
+            <div class="absolute bottom-1/4 -right-20 w-96 h-96 bg-blue-500/10 rounded-full blur-[120px] animate-float" style="animation-delay: -3s"></div>
 
-        <div class="max-w-7xl mx-auto">
-            <!-- Header Section -->
-            <header class="mb-16 animate-fade-in-up">
-                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-bold uppercase tracking-widest mb-6">
-                    <span class="relative flex h-2 w-2">
+            <div class="relative z-10 max-w-4xl text-center">
+                <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 mb-8 animate-fade-in-up" style="animation-delay: 0.1s">
+                    <span class="relative flex h-3 w-3">
                         <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                        <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                        <span class="relative inline-flex rounded-full h-3 w-3 bg-emerald-500"></span>
                     </span>
-                    System Active
+                    <span class="text-xs font-semibold uppercase tracking-wider text-emerald-400">Dashboard Personal Aktif</span>
                 </div>
-                <h1 class="text-5xl md:text-7xl font-display font-extrabold mb-6 tracking-tight leading-tight">
-                    Professional <br/><span class="bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">Therapy Control</span>
-                </h1>
-                <p class="text-slate-400 text-lg max-w-2xl leading-relaxed">
-                    Welcome back to Alam Terapy Command Center. Manage your operations, monitor customer interactions, and track professional services with precision.
-                </p>
-            </header>
-
-            <!-- BENTO GRID -->
-            <div class="grid grid-cols-1 md:grid-cols-12 gap-6">
                 
-                <!-- Terapis Card - Span 8 -->
-                <div class="md:col-span-8 glass-card rounded-[2rem] p-8 animate-fade-in-up stagger-1 group">
-                    <div class="flex flex-col md:flex-row md:items-center justify-between gap-6">
-                        <div class="flex items-start gap-6">
-                            <div class="w-16 h-16 bg-blue-500/20 rounded-2xl flex items-center justify-center text-3xl group-hover:animate-float">
-                                👨‍⚕️
-                            </div>
-                            <div>
-                                <h3 class="text-2xl font-bold mb-2">Ruangan Terapis</h3>
-                                <p class="text-slate-400">Monitoring real-time order dan aktivitas kerja terapis hari ini.</p>
-                                <div class="mt-4 flex gap-4 text-xs font-medium uppercase tracking-tighter">
-                                    <span class="flex items-center gap-1 text-emerald-400"><span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span> 12 Active</span>
-                                    <span class="flex items-center gap-1 text-slate-500"><span class="w-1.5 h-1.5 rounded-full bg-slate-500"></span> 4 Pending</span>
-                                </div>
-                            </div>
-                        </div>
-                        <a href="ISI_LINK_TERAPIS" class="bg-blue-600 hover:bg-blue-500 text-white font-bold py-4 px-8 rounded-2xl text-center transition-all shadow-lg shadow-blue-600/20 whitespace-nowrap">
-                            Buka Panel Terapis
-                        </a>
-                    </div>
+                <h1 class="text-5xl md:text-7xl font-display font-extrabold text-white leading-tight mb-8 animate-fade-in-up" style="animation-delay: 0.2s">
+                    SELAMAT DATANG DI <br>
+                    <span class="text-gradient">ALAMTERAPY</span>
+                </h1>
+                
+                <p class="text-lg md:text-xl text-slate-400 max-w-2xl mx-auto mb-12 animate-fade-in-up leading-relaxed" style="animation-delay: 0.3s">
+                    Temukan ketenangan dan kesehatan optimal melalui terapi alam yang dipandu secara profesional. Dashboard Anda adalah pusat kendali untuk perjalanan kesehatan mental dan fisik Anda.
+                </p>
+                
+                <div class="flex flex-col sm:flex-row items-center justify-center gap-4 animate-fade-in-up" style="animation-delay: 0.4s">
+                    <button class="btn-primary w-full sm:w-auto">Mulai Sesi Hari Ini</button>
+                    <button class="btn-outline w-full sm:w-auto">Lihat Progres</button>
                 </div>
+            </div>
+        </section>
 
-                <!-- Chat Card - Span 4 -->
-                <div class="md:col-span-4 glass-card rounded-[2rem] p-8 animate-fade-in-up stagger-2 group flex flex-col justify-between">
-                    <div class="w-14 h-14 bg-emerald-500/20 rounded-2xl flex items-center justify-center text-2xl mb-6">
-                        💬
-                    </div>
+        <!-- Stats Section -->
+        <section class="max-w-7xl mx-auto px-6 py-12">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8">
+                <div class="glass-card p-6 text-center">
+                    <div class="text-3xl font-display font-bold text-white mb-1">12</div>
+                    <div class="text-xs text-slate-400 uppercase tracking-widest">Sesi Selesai</div>
+                </div>
+                <div class="glass-card p-6 text-center">
+                    <div class="text-3xl font-display font-bold text-white mb-1">85%</div>
+                    <div class="text-xs text-slate-400 uppercase tracking-widest">Indeks Relaksasi</div>
+                </div>
+                <div class="glass-card p-6 text-center">
+                    <div class="text-3xl font-display font-bold text-white mb-1">4</div>
+                    <div class="text-xs text-slate-400 uppercase tracking-widest">Program Aktif</div>
+                </div>
+                <div class="glass-card p-6 text-center">
+                    <div class="text-3xl font-display font-bold text-white mb-1">24h</div>
+                    <div class="text-xs text-slate-400 uppercase tracking-widest">Waktu Terapi</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Features Bento Grid -->
+        <section id="features" class="max-w-7xl mx-auto px-6 py-24">
+            <div class="mb-16">
+                <h2 class="text-3xl md:text-4xl font-display font-bold text-white mb-4">Fitur Dashboard</h2>
+                <div class="w-20 h-1.5 bg-emerald-500 rounded-full"></div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-6">
+                <!-- Large Card -->
+                <div class="md:col-span-8 feature-card flex flex-col justify-between min-h-[300px]">
                     <div>
-                        <h3 class="text-xl font-bold mb-2">Chat Keluhan</h3>
-                        <p class="text-slate-400 text-sm mb-6">Tangani feedback dan pertanyaan pelanggan secara langsung.</p>
-                        <a href="ISI_LINK_CHAT" class="flex items-center justify-center gap-2 w-full bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold py-4 rounded-2xl transition-all">
-                            Buka Chat
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                                <path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+                        <div class="w-12 h-12 bg-emerald-500/20 rounded-2xl flex items-center justify-center mb-6">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
                             </svg>
-                        </a>
+                        </div>
+                        <h3 class="text-2xl font-display font-bold text-white mb-4">Analitik Kesehatan Menyeluruh</h3>
+                        <p class="text-slate-400 leading-relaxed max-w-lg">Pantau perkembangan kesehatan mental dan fisik Anda dengan data visual yang mudah dipahami. Kami merangkum setiap sesi terapi Anda menjadi wawasan yang berharga.</p>
+                    </div>
+                    <div class="mt-8 flex gap-4">
+                        <span class="px-3 py-1 bg-white/5 border border-white/10 rounded-full text-[10px] uppercase font-bold tracking-widest text-slate-500">Real-time Data</span>
+                        <span class="px-3 py-1 bg-white/5 border border-white/10 rounded-full text-[10px] uppercase font-bold tracking-widest text-slate-500">AI Powered</span>
                     </div>
                 </div>
 
-                <!-- Customer Card - Span 4 -->
-                <div class="md:col-span-4 glass-card rounded-[2rem] p-8 animate-fade-in-up stagger-3 group border-l-4 border-l-orange-500/30">
-                    <div class="w-12 h-12 bg-orange-500/20 rounded-xl flex items-center justify-center text-xl mb-4">
-                        👥
+                <!-- Square Card -->
+                <div class="md:col-span-4 feature-card flex flex-col justify-center text-center">
+                    <div class="w-16 h-16 bg-blue-500/20 rounded-full flex items-center justify-center mb-6 mx-auto">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
                     </div>
-                    <h3 class="text-xl font-bold mb-2">Database Pelanggan</h3>
-                    <p class="text-slate-400 text-sm mb-6">Akses data profil dan riwayat medis pelanggan tersimpan.</p>
-                    <a href="ISI_LINK_CUSTOMER" class="inline-flex items-center text-orange-400 font-semibold hover:gap-3 transition-all gap-2">
-                        Kelola Pelanggan <span class="text-lg">→</span>
-                    </a>
+                    <h3 class="text-xl font-display font-bold text-white mb-2">Penjadwalan</h3>
+                    <p class="text-slate-400 text-sm">Atur waktu sesi terapi alam Anda secara otomatis dengan sinkronisasi kalender.</p>
                 </div>
 
-                <!-- Order Card - Span 4 -->
-                <div class="md:col-span-4 glass-card rounded-[2rem] p-8 animate-fade-in-up stagger-4 group border-l-4 border-l-cyan-500/30">
-                    <div class="w-12 h-12 bg-cyan-500/20 rounded-xl flex items-center justify-center text-xl mb-4">
-                        📦
-                    </div>
-                    <h3 class="text-xl font-bold mb-2">Pesanan Masuk</h3>
-                    <p class="text-slate-400 text-sm mb-6">Verifikasi order baru dan penjadwalan layanan pijat.</p>
-                    <a href="ISI_LINK_ORDER" class="inline-flex items-center text-cyan-400 font-semibold hover:gap-3 transition-all gap-2">
-                        Monitor Pesanan <span class="text-lg">→</span>
-                    </a>
+                <!-- Small Card -->
+                <div class="md:col-span-4 feature-card">
+                    <h3 class="text-lg font-display font-bold text-white mb-2">Sertifikasi</h3>
+                    <p class="text-slate-400 text-sm">Dapatkan pengakuan atas kemajuan Anda dalam setiap modul terapi.</p>
                 </div>
 
-                <!-- Logout Card - Span 4 -->
-                <div class="md:col-span-4 bg-red-500/5 border border-red-500/20 rounded-[2rem] p-8 animate-fade-in-up stagger-5 flex flex-col justify-center items-center text-center group hover:bg-red-500/10 transition-all">
-                    <div class="w-12 h-12 bg-red-500/20 rounded-full flex items-center justify-center text-xl mb-4 group-hover:rotate-12 transition-transform">
-                        🚪
+                <!-- Medium Card -->
+                <div class="md:col-span-8 feature-card bg-gradient-to-br from-emerald-500/20 to-transparent">
+                    <div class="flex flex-col md:flex-row items-center gap-8">
+                        <div class="flex-1">
+                            <h3 class="text-xl font-display font-bold text-white mb-2">Dukungan Komunitas</h3>
+                            <p class="text-slate-400 text-sm">Terhubung dengan pengguna lain untuk berbagi pengalaman dan dukungan moral dalam perjalanan menuju kesehatan paripurna.</p>
+                        </div>
+                        <button class="px-6 py-3 bg-white text-slate-950 rounded-xl font-bold text-sm whitespace-nowrap">Gabung Grup</button>
                     </div>
-                    <h3 class="text-xl font-bold mb-1">Akhiri Sesi</h3>
-                    <p class="text-slate-500 text-sm mb-6">Pastikan semua data tersimpan.</p>
-                    <a href="index.html" class="px-8 py-3 rounded-xl border border-red-500/30 text-red-400 font-bold hover:bg-red-500 hover:text-white transition-all">
-                        Logout
-                    </a>
-                </div>
-
-            </div>
-
-            <!-- SYSTEM STATS FOOTER AREA -->
-            <div class="mt-20 pt-10 border-t border-slate-800 flex flex-col md:flex-row justify-between items-center gap-8 text-slate-500 text-sm">
-                <div class="flex items-center gap-6">
-                    <div class="flex flex-col">
-                        <span class="text-[10px] uppercase tracking-widest text-slate-600 font-bold">Uptime</span>
-                        <span class="text-slate-300 font-medium">99.98% Stable</span>
-                    </div>
-                    <div class="flex flex-col">
-                        <span class="text-[10px] uppercase tracking-widest text-slate-600 font-bold">Version</span>
-                        <span class="text-slate-300 font-medium">v4.2.0-Production</span>
-                    </div>
-                </div>
-                <div class="flex items-center gap-4">
-                    <a href="#" class="hover:text-emerald-400">Terms of Service</a>
-                    <span class="text-slate-800">•</span>
-                    <a href="#" class="hover:text-emerald-400">Security Policy</a>
-                    <span class="text-slate-800">•</span>
-                    <a href="#" class="hover:text-emerald-400">Support</a>
                 </div>
             </div>
-        </div>
+        </section>
+
+        <!-- Final CTA Section -->
+        <section id="session" class="max-w-5xl mx-auto px-6 py-24 text-center">
+            <div class="glass-card p-12 md:p-20 relative overflow-hidden border-emerald-500/20">
+                <div class="absolute -top-10 -right-10 w-40 h-40 bg-emerald-500/20 rounded-full blur-3xl"></div>
+                <h2 class="text-3xl md:text-5xl font-display font-bold text-white mb-6">Siap Kembali Beraktivitas?</h2>
+                <p class="text-slate-400 text-lg mb-10 max-w-xl mx-auto">Jika Anda sudah selesai mengeksplorasi dashboard Anda, pastikan untuk keluar dengan aman untuk menjaga privasi data Anda.</p>
+                <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+                    <button onclick="logout()" class="btn-primary w-full sm:w-auto px-12">
+                        KELUAR SEKARANG
+                    </button>
+                </div>
+            </div>
+        </section>
     </main>
 
+    <!-- Firebase Integration -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase.js"></script>
+
     <script>
-        function toggleMobileMenu() {
-            const menu = document.getElementById('mobileMenu');
-            menu.classList.toggle('translate-x-full');
+        // Firebase Initialization (Using placeholders from blueprint)
+        const firebaseConfig = {
+            apiKey: "ISI_APIKEY",
+            authDomain: "ISI_DOMAIN",
+            projectId: "ISI_PROJECT",
+        };
+        
+        // Initialize Firebase safely
+        try {
+            if (!firebase.apps.length) {
+                firebase.initializeApp(firebaseConfig);
+            }
+        } catch (e) {
+            console.error("Firebase initialization failed", e);
         }
 
-        // Add scroll effect to header
-        window.addEventListener('scroll', () => {
-            const header = document.querySelector('nav');
-            if (window.scrollY > 20) {
-                header.classList.add('py-3');
-                header.classList.remove('py-4');
-                header.style.boxShadow = '0 10px 30px -10px rgba(0,0,0,0.5)';
-            } else {
-                header.classList.add('py-4');
-                header.classList.remove('py-3');
-                header.style.boxShadow = 'none';
+        // Logout Functionality
+        function logout() {
+            // UI Feedback
+            const btn = event?.target;
+            if (btn) {
+                btn.innerHTML = `
+                    <svg class="animate-spin h-5 w-5 text-slate-950 inline-block" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    Logging out...
+                `;
             }
+
+            // Real Firebase logic
+            firebase.auth().signOut()
+                .then(() => {
+                    console.log("Sign out successful");
+                    window.location.href = "index.html";
+                })
+                .catch((error) => {
+                    console.error("Logout error:", error);
+                    // Fallback redirect if firebase fails
+                    window.location.href = "index.html";
+                });
+        }
+
+        // Mobile Menu Logic
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const closeMenuBtn = document.getElementById('close-menu');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileMenu.classList.remove('hidden');
+            mobileMenu.classList.add('flex');
+            document.body.style.overflow = 'hidden';
+        });
+
+        const hideMenu = () => {
+            mobileMenu.classList.add('hidden');
+            mobileMenu.classList.remove('flex');
+            document.body.style.overflow = 'auto';
+        };
+
+        closeMenuBtn.addEventListener('click', hideMenu);
+        mobileMenu.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', hideMenu);
         });
 
         // Intersection Observer for animations
@@ -300,15 +334,15 @@
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
-                    entry.target.style.opacity = '1';
-                    entry.target.style.transform = 'translateY(0)';
+                    entry.target.classList.add('animate-fade-in-up');
                 }
             });
         }, observerOptions);
 
-        document.querySelectorAll('.animate-fade-in-up').forEach(el => {
-            observer.observe(el);
+        document.querySelectorAll('.feature-card').forEach(card => {
+            observer.observe(card);
         });
     </script>
 </body>
 </html>
+

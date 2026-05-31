@@ -1,13 +1,13 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="id" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login ALAMTERAPY</title>
-    <!-- Tailwind CSS CDN -->
+    <title>Login | ALAMTERAPY - Solusi Kesehatan Modern</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Google Fonts: Outfit & Inter -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@300;600;800&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
     <script>
         tailwind.config = {
@@ -15,239 +15,292 @@
                 extend: {
                     colors: {
                         brand: {
-                            primary: '#10b981', // Emerald
-                            accent: '#8b5cf6',  // Violet
-                            dark: '#0f172a',    // Deep Slate
-                            surface: 'rgba(255, 255, 255, 0.7)',
+                            light: '#7dd3fc',
+                            DEFAULT: '#4bb3c1',
+                            dark: '#0e7490',
+                        },
+                        accent: '#8b5cf6',
+                        slate: {
+                            950: '#0f172a',
                         }
                     },
                     fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
                         display: ['Outfit', 'sans-serif'],
                     },
-                    animation: {
-                        'fade-up': 'fadeUp 0.6s ease-out forwards',
-                        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
-                    },
-                    keyframes: {
-                        fadeUp: {
-                            '0%': { opacity: '0', transform: 'translateY(20px)' },
-                            '100%': { opacity: '1', transform: 'translateY(0)' },
-                        }
+                    borderRadius: {
+                        '4xl': '2rem',
                     }
                 }
             }
         }
     </script>
 
-    <style>
+    <style type="text/css">
         body {
-            background: radial-gradient(circle at top right, #1e293b, #0f172a);
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow-x: hidden;
+            background-color: #f8fafc;
+            -webkit-tap-highlight-color: transparent;
         }
 
         .glass-card {
-            background: rgba(255, 255, 255, 0.03);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.08);
         }
 
-        .input-glow:focus {
-            box-shadow: 0 0 15px rgba(16, 185, 129, 0.3);
-            border-color: #10b981;
+        .input-gradient-border {
+            position: relative;
+            background: #fff;
         }
-
-        /* Ambient Background elements */
-        .blob {
+        
+        .input-gradient-border::after {
+            content: '';
             position: absolute;
-            width: 400px;
-            height: 400px;
-            background: linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(139, 92, 246, 0.15));
-            filter: blur(80px);
-            border-radius: 50%;
-            z-index: -1;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, #4bb3c1, #8b5cf6);
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .input-gradient-border:focus-within::after {
+            transform: scaleX(1);
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .animate-fade-in-up {
+            animation: fadeInUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        .header-curved {
+            border-bottom-left-radius: 80px;
+            border-bottom-right-radius: 80px;
+            background: linear-gradient(135deg, #4bb3c1 0%, #3a97a4 100%);
+        }
+
+        @media (min-width: 768px) {
+            .header-curved {
+                border-bottom-left-radius: 120px;
+                border-bottom-right-radius: 120px;
+            }
         }
     </style>
 </head>
-<body class="antialiased text-slate-200">
+<body class="font-sans text-slate-900 overflow-x-hidden">
 
-    <!-- Background Blobs -->
-    <div class="blob top-0 -left-20 animate-pulse-slow"></div>
-    <div class="blob bottom-0 -right-20 animate-pulse-slow" style="animation-delay: 2s;"></div>
+    <!-- Header / Branding Section -->
+    <header class="header-curved relative h-[320px] md:h-[380px] w-full flex flex-col items-center justify-start pt-16 px-6 overflow-hidden">
+        <!-- Decorative Elements -->
+        <div class="absolute top-[-10%] left-[-10%] w-64 h-64 bg-white/10 rounded-full blur-3xl"></div>
+        <div class="absolute bottom-10 right-[-5%] w-48 h-48 bg-brand-light/20 rounded-full blur-2xl"></div>
 
-    <main class="w-full max-w-md px-6 py-12 animate-fade-up">
-        
-        <!-- Header Branding -->
-        <header class="text-center mb-10">
-            <div class="inline-block p-3 rounded-2xl bg-brand-primary/10 border border-brand-primary/20 mb-4">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-brand-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m12.728 0l-.707-.707M6.343 6.343l-.707-.707m9.172 9.172L15 12m-3 3l-3-3m3-3l-3 3" />
+        <div class="z-10 text-center animate-fade-in-up">
+            <div class="inline-flex items-center justify-center p-3 mb-6 rounded-2xl bg-white/20 backdrop-blur-md">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
                 </svg>
             </div>
-            <h1 class="font-display text-4xl font-extrabold tracking-tight text-white mb-2">
-                ALAM<span class="text-brand-primary">TERAPY</span>
-            </h1>
-            <p class="text-slate-400 font-sans text-sm tracking-wide uppercase">Portal Akses Premium</p>
-        </header>
+            <h1 class="font-display font-bold text-3xl md:text-4xl text-white tracking-tight">ALAMTERAPY</h1>
+            <p class="mt-2 text-brand-light font-medium opacity-90">Kesehatan Alami untuk Hidup Berkualitas</p>
+        </div>
+    </header>
 
-        <!-- Login Card -->
-        <div class="glass-card rounded-3xl p-8 md:p-10 transition-all duration-300 hover:border-brand-primary/30">
-            <form onsubmit="event.preventDefault();" class="space-y-6">
-                <!-- Email Field -->
-                <div class="space-y-2">
-                    <label for="email" class="text-xs font-semibold text-slate-400 uppercase tracking-widest ml-1">Email Address</label>
-                    <input 
-                        type="email" 
-                        id="email" 
-                        placeholder="nama@email.com" 
-                        class="w-full bg-slate-900/50 border border-slate-700 rounded-xl px-4 py-4 text-white placeholder-slate-500 transition-all outline-none input-glow"
-                        required
-                    >
+    <!-- Main Authentication Content -->
+    <main class="relative z-20 -mt-24 md:-mt-32 px-4 pb-20 max-w-lg mx-auto w-full">
+        <div class="glass-card rounded-[2.5rem] p-8 md:p-12 animate-fade-in-up" style="animation-delay: 0.1s;">
+            
+            <div class="mb-10 text-center">
+                <h2 class="text-2xl font-display font-bold text-slate-900">Selamat Datang!</h2>
+                <p class="text-slate-500 mt-1">Silakan masuk untuk melanjutkan akses layanan kami.</p>
+            </div>
+
+            <!-- Login Form Components -->
+            <div class="space-y-6">
+                
+                <!-- Email/Phone Input -->
+                <div class="relative group">
+                    <label for="loginInput" class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1 ml-1">Email atau No. HP</label>
+                    <div class="input-gradient-border border-b border-slate-200">
+                        <input 
+                            type="text" 
+                            id="loginInput" 
+                            placeholder="nama@email.com / 0812..." 
+                            class="w-full bg-transparent py-4 outline-none text-slate-800 font-medium placeholder:text-slate-300 transition-all"
+                        >
+                    </div>
                 </div>
 
-                <!-- Password Field -->
-                <div class="space-y-2">
-                    <label for="password" class="text-xs font-semibold text-slate-400 uppercase tracking-widest ml-1">Password</label>
-                    <input 
-                        type="password" 
-                        id="password" 
-                        placeholder="••••••••" 
-                        class="w-full bg-slate-900/50 border border-slate-700 rounded-xl px-4 py-4 text-white placeholder-slate-500 transition-all outline-none input-glow"
-                        required
-                    >
+                <!-- Password Input -->
+                <div class="relative group">
+                    <label for="password" class="block text-xs font-bold uppercase tracking-wider text-slate-400 mb-1 ml-1">Password</label>
+                    <div class="input-gradient-border border-b border-slate-200 relative flex items-center">
+                        <input 
+                            type="password" 
+                            id="password" 
+                            placeholder="••••••••" 
+                            class="w-full bg-transparent py-4 pr-12 outline-none text-slate-800 font-medium placeholder:text-slate-300 transition-all"
+                        >
+                        <button 
+                            type="button" 
+                            onclick="lihat()" 
+                            class="absolute right-0 p-2 text-slate-400 hover:text-brand transition-colors focus:outline-none"
+                            aria-label="Toggle password visibility"
+                        >
+                            <svg id="eye-icon" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                            </svg>
+                        </button>
+                    </div>
                 </div>
 
-                <!-- Action Buttons -->
-                <div class="pt-4 space-y-4">
+                <!-- Submit Button -->
+                <div class="pt-4">
                     <button 
                         onclick="login()" 
-                        class="group relative w-full bg-brand-primary hover:bg-emerald-400 text-brand-dark font-bold py-4 rounded-xl transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98] shadow-lg shadow-brand-primary/20"
+                        class="w-full bg-brand hover:bg-brand-dark text-white font-bold py-4 rounded-2xl transition-all duration-300 shadow-lg shadow-brand/30 transform hover:-translate-y-1 active:scale-[0.98] flex items-center justify-center space-x-2"
                     >
-                        <span>Masuk Sekarang</span>
-                        <div class="absolute inset-0 rounded-xl bg-white/20 opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                    </button>
-
-                    <div class="flex items-center gap-4 py-2">
-                        <div class="h-[1px] flex-1 bg-slate-800"></div>
-                        <span class="text-xs text-slate-500 font-medium">ATAU</span>
-                        <div class="h-[1px] flex-1 bg-slate-800"></div>
-                    </div>
-
-                    <button 
-                        onclick="daftar()" 
-                        class="w-full bg-transparent border border-slate-700 hover:border-brand-accent text-slate-300 hover:text-white font-medium py-3 rounded-xl transition-all duration-300 flex items-center justify-center gap-2"
-                    >
-                        Buat Akun Baru
+                        <span>MASUK SEKARANG</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd" />
+                        </svg>
                     </button>
                 </div>
-            </form>
 
-            <!-- Status Feedback Area -->
-            <div id="status" class="mt-6 text-sm text-center min-h-[1.5rem] transition-all duration-300">
-                <!-- Status messages will appear here -->
+                <!-- Footer Links -->
+                <div class="text-center mt-8">
+                    <p class="text-slate-500 font-medium">
+                        Belum punya akun? 
+                        <a href="daftar.html" class="text-brand font-bold hover:underline transition-all">Daftar Sekarang</a>
+                    </p>
+                </div>
+
             </div>
         </div>
 
-        <!-- System Footer (Non-legal, Feature-oriented) -->
-        <div class="mt-12 text-center">
-            <p class="text-slate-500 text-xs tracking-wider">SECURED BY FIREBASE PROTOCOL</p>
+        <!-- Trust Badges / Social Proof -->
+        <div class="mt-12 flex justify-center space-x-8 opacity-40 grayscale filter hover:grayscale-0 transition-all duration-500">
+            <div class="flex flex-col items-center">
+                <div class="h-8 w-8 rounded-full bg-slate-400"></div>
+                <span class="text-[10px] mt-1 font-bold">TERVERIFIKASI</span>
+            </div>
+            <div class="flex flex-col items-center">
+                <div class="h-8 w-8 rounded-full bg-slate-400"></div>
+                <span class="text-[10px] mt-1 font-bold">AMAN 256-BIT</span>
+            </div>
+            <div class="flex flex-col items-center">
+                <div class="h-8 w-8 rounded-full bg-slate-400"></div>
+                <span class="text-[10px] mt-1 font-bold">KUALITAS PRIMA</span>
+            </div>
         </div>
     </main>
 
-    <!-- Firebase SDK (v8.10.0) -->
+    <!-- Firebase Core (Version 8.10.0 per blueprint) -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase.js"></script>
 
     <script>
-        // Firebase Configuration
+        // --- Firebase Configuration ---
+        // Note: Replace with your actual project credentials
         const firebaseConfig = {
-            apiKey: "AIzaSyAYG9MhzNiYKUy8XdmYmKWIH-kMUpxvGzk",
-            authDomain: "alamterapi1.firebaseapp.com",
-            databaseURL: "https://alamterapi1-default-rtdb.firebaseio.com",
-            projectId: "alamterapi1",
-            storageBucket: "alamterapi1.firebasestorage.app",
-            messagingSenderId: "733767845112",
-            appId: "1:733767845112:web:6002f2b9884c33b0fde70d",
-            measurementId: "G-LP3LTWJ9TX"
+            apiKey: "ISI_APIKEY",
+            authDomain: "ISI_DOMAIN",
+            projectId: "ISI_PROJECT",
         };
-
+        
         // Initialize Firebase
-        firebase.initializeApp(firebaseConfig);
+        if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
+        }
 
-        const statusEl = document.getElementById("status");
-
-        // UI Feedback Helper
-        function showMessage(msg, isError = false) {
-            statusEl.innerHTML = msg;
-            statusEl.className = `mt-6 text-sm text-center transition-all duration-300 ${isError ? 'text-rose-400' : 'text-emerald-400'}`;
+        /**
+         * Toggles password visibility between 'text' and 'password'
+         */
+        function lihat() {
+            const passwordField = document.getElementById("password");
+            const eyeIcon = document.getElementById("eye-icon");
             
-            // Clear error message after 5 seconds
-            if (isError) {
-                setTimeout(() => {
-                    statusEl.style.opacity = '0';
-                    setTimeout(() => { statusEl.innerHTML = ''; statusEl.style.opacity = '1'; }, 300);
-                }, 5000);
+            if (passwordField.type === "password") {
+                passwordField.type = "text";
+                // Change icon to 'eye-off' style (simplified logic)
+                eyeIcon.innerHTML = `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l18 18" />`;
+            } else {
+                passwordField.type = "password";
+                eyeIcon.innerHTML = `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />`;
             }
         }
 
-        // Auto Login Redirect
-        firebase.auth().onAuthStateChanged(function(user) {
-            if (user) {
-                showMessage("✅ Mengalihkan ke Dashboard...");
-                setTimeout(() => {
-                    window.location.href = "dashboard.html";
-                }, 1000);
+        /**
+         * Handles the login branching logic:
+         * Email -> Firebase Auth
+         * Phone Number -> OTP Page
+         */
+        async function login() {
+            const inputVal = document.getElementById("loginInput").value.trim();
+            const passVal = document.getElementById("password").value;
+
+            if (!inputVal) {
+                alert("Harap masukkan Email atau Nomor HP");
+                return;
             }
+
+            // Show loading state (UI refinement)
+            const btn = document.querySelector('button[onclick="login()"]');
+            const originalContent = btn.innerHTML;
+            btn.innerHTML = `<svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> <span>PROSES...</span>`;
+            btn.disabled = true;
+
+            try {
+                if (inputVal.includes("@")) {
+                    // Logic Branch: Firebase Email Auth
+                    if (!passVal) {
+                        alert("Password wajib diisi untuk login email.");
+                        resetBtn();
+                        return;
+                    }
+                    
+                    firebase.auth().signInWithEmailAndPassword(inputVal, passVal)
+                        .then(() => {
+                            window.location.href = "dashboard.html";
+                        })
+                        .catch((error) => {
+                            alert("Login Gagal: " + error.message);
+                            resetBtn();
+                        });
+                } else {
+                    // Logic Branch: Phone OTP
+                    localStorage.setItem("nohp", inputVal);
+                    window.location.href = "otp.html";
+                }
+            } catch (err) {
+                alert("Terjadi kesalahan sistem.");
+                resetBtn();
+            }
+
+            function resetBtn() {
+                btn.innerHTML = originalContent;
+                btn.disabled = false;
+            }
+        }
+
+        // Simple smooth scroll and hover interactions
+        document.querySelectorAll('input').forEach(input => {
+            input.addEventListener('focus', () => {
+                input.parentElement.parentElement.classList.add('border-brand');
+            });
+            input.addEventListener('blur', () => {
+                input.parentElement.parentElement.classList.remove('border-brand');
+            });
         });
-
-        // Register Function
-        function daftar() {
-            const email = document.getElementById("email").value;
-            const password = document.getElementById("password").value;
-
-            if (!email || !password) {
-                showMessage("Harap isi email dan password.", true);
-                return;
-            }
-
-            showMessage("<span class='animate-pulse'>Mendaftarkan akun...</span>");
-
-            firebase.auth().createUserWithEmailAndPassword(email, password)
-                .then((userCredential) => {
-                    showMessage("✅ Berhasil daftar! Silakan masuk.");
-                })
-                .catch((error) => {
-                    showMessage(`❌ Error: ${error.message}`, true);
-                });
-        }
-
-        // Login Function
-        function login() {
-            const email = document.getElementById("email").value;
-            const password = document.getElementById("password").value;
-
-            if (!email || !password) {
-                showMessage("Harap isi email dan password.", true);
-                return;
-            }
-
-            showMessage("<span class='animate-pulse'>Mengautentikasi...</span>");
-
-            firebase.auth().signInWithEmailAndPassword(email, password)
-                .then((userCredential) => {
-                    showMessage("✅ Login Berhasil!");
-                    // onAuthStateChanged handles the redirect
-                })
-                .catch((error) => {
-                    showMessage(`❌ Error: ${error.message}`, true);
-                });
-        }
     </script>
+
 </body>
 </html>
-

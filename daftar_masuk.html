@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daftar | Premium Authentication</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Inter & Outfit -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Outfit:wght@600;700;800&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            base: '#0f172a',
+                            accent: '#8b5cf6', // Electric Violet
+                            surface: '#1e293b',
+                            muted: '#94a3b8'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        display: ['Outfit', 'sans-serif'],
+                    },
+                    animation: {
+                        'fade-in-up': 'fadeInUp 0.6s ease-out forwards',
+                        'glow': 'glow 3s infinite alternate',
+                    },
+                    keyframes: {
+                        fadeInUp: {
+                            '0%': { opacity: '0', transform: 'translateY(20px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        },
+                        glow: {
+                            '0%': { boxShadow: '0 0 5px rgba(139, 92, 246, 0.2)' },
+                            '100%': { boxShadow: '0 0 20px rgba(139, 92, 246, 0.6)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer base {
+            body {
+                @apply bg-brand-base text-slate-100 font-sans antialiased overflow-x-hidden;
+            }
+        }
+        .glass-morphism {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .input-gradient-focus:focus {
+            outline: none;
+            border-color: #8b5cf6;
+            box-shadow: 0 0 0 2px rgba(139, 92, 246, 0.2);
+        }
+        .hero-gradient {
+            background: radial-gradient(circle at top right, rgba(139, 92, 246, 0.15), transparent 40%),
+                        radial-gradient(circle at bottom left, rgba(16, 185, 129, 0.05), transparent 40%);
+        }
+    </style>
+</head>
+<body class="hero-gradient min-h-screen flex flex-col">
+
+    <!-- Sticky Header -->
+    <header class="fixed top-0 w-full z-50 glass-morphism">
+        <nav class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+            <div class="flex items-center gap-2">
+                <div class="w-10 h-10 bg-brand-accent rounded-xl flex items-center justify-center shadow-lg shadow-brand-accent/30">
+                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 11c0 3.517-1.009 6.799-2.753 9.571m-3.44-2.04l.054-.09c.059-.1.106-.204.138-.311l.863-2.851a.75.75 0 01.928-.505l2.851.863c.107.032.21.079.311.139l.09.054m1.296-1.296l.054-.09c.059-.1.106-.204.138-.311l.863-2.851a.75.75 0 01.928-.505l2.851.863c.107.032.21.079.311.139l.09.054M11 4a2 2 0 114 0 2 2 0 01-4 0zM7 20h10a2 2 0 002-2v-3a2 2 0 00-2-2H7a2 2 0 00-2 2v3a2 2 0 002 2z"></path></svg>
+                </div>
+                <span class="font-display text-xl font-bold tracking-tight">PORTAL</span>
+            </div>
+            <div class="hidden md:flex gap-8 text-sm font-medium text-brand-muted hover:text-white transition-colors">
+                <a href="#" class="hover:text-brand-accent">Beranda</a>
+                <a href="#" class="hover:text-brand-accent">Fitur</a>
+                <a href="#" class="hover:text-brand-accent">Bantuan</a>
+            </div>
+            <button class="px-5 py-2 rounded-full text-sm font-semibold border border-white/10 hover:bg-white/5 transition-all">
+                Masuk
+            </button>
+        </nav>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="flex-grow flex items-center justify-center px-6 pt-32 pb-20">
+        <div class="w-full max-w-md animate-fade-in-up">
+            
+            <!-- Registration Card -->
+            <div class="glass-morphism rounded-[2rem] p-8 md:p-10 shadow-2xl relative overflow-hidden group">
+                <!-- Decorative background elements -->
+                <div class="absolute -top-24 -right-24 w-48 h-48 bg-brand-accent/10 rounded-full blur-3xl group-hover:bg-brand-accent/20 transition-all duration-700"></div>
+                
+                <div class="relative z-10">
+                    <div class="mb-10">
+                        <h2 class="font-display text-4xl font-extrabold mb-3 tracking-tight text-white">DAFTAR</h2>
+                        <p class="text-brand-muted leading-relaxed">Bergabunglah dengan ekosistem kami yang eksklusif dan mulailah perjalanan Anda hari ini.</p>
+                    </div>
+
+                    <div class="space-y-6">
+                        <!-- Email Input -->
+                        <div class="space-y-2">
+                            <label for="email" class="text-xs font-semibold uppercase tracking-widest text-brand-muted ml-1">Alamat Email</label>
+                            <div class="relative">
+                                <span class="absolute inset-y-0 left-0 pl-4 flex items-center text-brand-muted">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 12a4 4 0 10-8 0 4 4 0 008 0zm0 0v1.5a2.5 2.5 0 005 0V12a9 9 0 10-9 9m4.5-1.206a8.959 8.959 0 01-4.5 1.206"></path></svg>
+                                </span>
+                                <input 
+                                    type="email" 
+                                    id="email" 
+                                    placeholder="nama@email.com" 
+                                    class="w-full bg-brand-base/50 border border-white/10 rounded-2xl py-4 pl-12 pr-4 text-white placeholder:text-slate-500 transition-all input-gradient-focus"
+                                >
+                            </div>
+                        </div>
+
+                        <!-- Password Input -->
+                        <div class="space-y-2">
+                            <label for="password" class="text-xs font-semibold uppercase tracking-widest text-brand-muted ml-1">Kata Sandi</label>
+                            <div class="relative">
+                                <span class="absolute inset-y-0 left-0 pl-4 flex items-center text-brand-muted">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+                                </span>
+                                <input 
+                                    type="password" 
+                                    id="password" 
+                                    placeholder="Min. 8 karakter" 
+                                    class="w-full bg-brand-base/50 border border-white/10 rounded-2xl py-4 pl-12 pr-4 text-white placeholder:text-slate-500 transition-all input-gradient-focus"
+                                >
+                            </div>
+                        </div>
+
+                        <!-- Action Button -->
+                        <div class="pt-4">
+                            <button 
+                                onclick="daftar()" 
+                                id="submitBtn"
+                                class="w-full py-4 px-6 bg-brand-accent hover:bg-brand-accent/90 text-white font-bold rounded-2xl shadow-lg shadow-brand-accent/25 transition-all active:scale-[0.98] flex items-center justify-center gap-2 group"
+                            >
+                                <span>DAFTAR SEKARANG</span>
+                                <svg class="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path></svg>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="mt-8 text-center">
+                        <p class="text-sm text-brand-muted">
+                            Sudah memiliki akun? 
+                            <a href="#" class="text-brand-accent font-semibold hover:underline decoration-brand-accent/30 underline-offset-4">Masuk di sini</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Trust Badges -->
+            <div class="mt-12 flex flex-wrap justify-center gap-8 opacity-40 grayscale hover:grayscale-0 transition-all duration-500">
+                <div class="flex items-center gap-2">
+                    <div class="w-8 h-8 rounded-full bg-slate-700"></div>
+                    <span class="text-xs font-bold tracking-widest uppercase">Secured</span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <div class="w-8 h-8 rounded-full bg-slate-700"></div>
+                    <span class="text-xs font-bold tracking-widest uppercase">Verified</span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <div class="w-8 h-8 rounded-full bg-slate-700"></div>
+                    <span class="text-xs font-bold tracking-widest uppercase">Private</span>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase.js"></script>
+
+    <script>
+        // Firebase Configuration (Placeholders)
+        var firebaseConfig = {
+            apiKey: "ISI_APIKEY",
+            authDomain: "ISI_DOMAIN",
+            projectId: "ISI_PROJECT",
+        };
+        
+        // Initialize Firebase
+        if (firebaseConfig.apiKey !== "ISI_APIKEY") {
+            firebase.initializeApp(firebaseConfig);
+        } else {
+            console.warn("Firebase configuration has not been set yet. Registration function will alert but not connect to a real database.");
+        }
+
+        async function daftar() {
+            const emailInput = document.getElementById('email');
+            const passwordInput = document.getElementById('password');
+            const submitBtn = document.getElementById('submitBtn');
+            const email = emailInput.value;
+            const password = passwordInput.value;
+
+            // Simple validation
+            if (!email || !password) {
+                alert("Mohon lengkapi email dan password Anda.");
+                return;
+            }
+
+            // Visual loading state
+            const originalText = submitBtn.innerHTML;
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = `
+                <svg class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                <span>Memproses...</span>
+            `;
+
+            // Mock logic if API key isn't set, otherwise real Firebase logic
+            if (firebaseConfig.apiKey === "ISI_APIKEY") {
+                setTimeout(() => {
+                    alert("Catatan: Firebase API belum dikonfigurasi. (Simulasi berhasil)");
+                    window.location.href = "index.html";
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = originalText;
+                }, 1500);
+                return;
+            }
+
+            // Real Firebase Auth
+            firebase.auth().createUserWithEmailAndPassword(email, password)
+                .then((userCredential) => {
+                    alert("Selamat! Berhasil daftar.");
+                    window.location.href = "index.html";
+                })
+                .catch((error) => {
+                    const errorCode = error.code;
+                    const errorMessage = error.message;
+                    alert("Error: " + errorMessage);
+                })
+                .finally(() => {
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = originalText;
+                });
+        }
+
+        // Entrance Animation Tweaks
+        document.addEventListener('DOMContentLoaded', () => {
+            const card = document.querySelector('.glass-morphism');
+            card.style.opacity = '0';
+            setTimeout(() => {
+                card.style.opacity = '1';
+                card.classList.add('animate-fade-in-up');
+            }, 100);
+        });
+    </script>
+</body>
+</html>
