@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat ALAMTERAPY | Premium Wellness Consultation</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            primary: '#075e54',
+                            secondary: '#128c7e',
+                            accent: '#25d366',
+                            light: '#dcf8c6',
+                            background: '#f0f2f5',
+                            dark: '#0f172a'
+                        }
+                    },
+                    fontFamily: {
+                        display: ['Outfit', 'sans-serif'],
+                        body: ['Plus Jakarta Sans', 'sans-serif'],
+                    },
+                    animation: {
+                        'fade-in-up': 'fadeInUp 0.5s ease-out forwards',
+                        'slide-in': 'slideIn 0.3s ease-out forwards',
+                    },
+                    keyframes: {
+                        fadeInUp: {
+                            '0%': { opacity: '0', transform: 'translateY(20px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        },
+                        slideIn: {
+                            '0%': { opacity: '0', transform: 'scale(0.95)' },
+                            '100%': { opacity: '1', transform: 'scale(1)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style type="text/css">
+        body {
+            background-color: #f0f2f5;
+            background-image: radial-gradient(#e5e7eb 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+
+        .glass-header {
+            background: rgba(7, 94, 84, 0.9);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .chat-container {
+            height: calc(100vh - 180px);
+            scrollbar-width: thin;
+            scrollbar-color: rgba(7, 94, 84, 0.2) transparent;
+        }
+
+        .chat-container::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .chat-container::-webkit-scrollbar-thumb {
+            background-color: rgba(7, 94, 84, 0.2);
+            border-radius: 20px;
+        }
+
+        .bubble-me {
+            position: relative;
+            background: #dcf8c6;
+            border-bottom-right-radius: 2px !important;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .bubble-admin {
+            position: relative;
+            background: #ffffff;
+            border-bottom-left-radius: 2px !important;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .input-area {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            border-top: 1px solid rgba(0,0,0,0.05);
+        }
+
+        .typing-indicator span {
+            height: 8px;
+            width: 8px;
+            float: left;
+            margin: 0 1px;
+            background-color: #9ca3af;
+            display: block;
+            border-radius: 50%;
+            opacity: 0.4;
+        }
+
+        .typing-indicator span:nth-of-type(1) { animation: 1s blink infinite 0.3333s; }
+        .typing-indicator span:nth-of-type(2) { animation: 1s blink infinite 0.6666s; }
+        .typing-indicator span:nth-of-type(3) { animation: 1s blink infinite 0.9999s; }
+
+        @keyframes blink {
+            50% { opacity: 1; }
+        }
+    </style>
+</head>
+<body class="font-body text-brand-dark overflow-hidden">
+
+    <!-- Header -->
+    <header class="glass-header fixed top-0 w-full z-50 px-6 py-4 flex items-center justify-between shadow-lg">
+        <div class="flex items-center space-x-3">
+            <div class="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center border border-white/30 backdrop-blur-md">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                </svg>
+            </div>
+            <div>
+                <h1 class="text-white font-display font-bold text-lg leading-tight">Chat ALAMTERAPY</h1>
+                <div class="flex items-center space-x-1">
+                    <span class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
+                    <span class="text-white/80 text-xs font-medium">Konsultasi Online</span>
+                </div>
+            </div>
+        </div>
+        <button class="text-white/80 hover:text-white transition-colors">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" />
+            </svg>
+        </button>
+    </header>
+
+    <!-- Main Content -->
+    <main class="pt-24 pb-20 max-w-4xl mx-auto px-4 sm:px-6">
+        <!-- Chat History -->
+        <div id="chat" class="chat-container overflow-y-auto space-y-4 pb-10">
+            <!-- Initial Welcome Message -->
+            <div class="flex justify-center mb-6">
+                <span class="bg-white/50 backdrop-blur-sm text-gray-500 text-[10px] uppercase tracking-widest font-bold px-3 py-1 rounded-full border border-gray-200">
+                    Sesi Dimulai • Hari Ini
+                </span>
+            </div>
+            
+            <div class="flex flex-col items-start space-y-1 animate-slide-in">
+                <div class="bubble-admin max-w-[85%] sm:max-w-[70%] p-4 rounded-2xl text-sm leading-relaxed text-gray-800">
+                    <p>Halo! Selamat datang di ALAMTERAPY. Ada yang bisa kami bantu hari ini terkait kesehatan dan terapi Anda?</p>
+                    <span class="block text-[10px] text-gray-400 mt-2 text-right">09:00 AM</span>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Input Bar -->
+    <section class="fixed bottom-0 w-full p-4 sm:p-6 input-area z-50">
+        <div class="max-w-4xl mx-auto">
+            <div class="relative flex items-end space-x-2 bg-white rounded-2xl shadow-xl border border-gray-100 p-2 transition-all focus-within:ring-2 focus-within:ring-brand-primary/20">
+                <button class="p-2 text-gray-400 hover:text-brand-primary transition-colors mb-1">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                </button>
+                
+                <textarea 
+                    id="msg" 
+                    placeholder="Tulis pesan..." 
+                    rows="1"
+                    class="flex-1 bg-transparent border-none focus:ring-0 text-brand-dark py-2 px-1 text-sm resize-none max-h-32"
+                    onkeydown="if(event.keyCode===13 && !event.shiftKey){ event.preventDefault(); kirim(); }"
+                ></textarea>
+
+                <button 
+                    onclick="kirim()"
+                    class="bg-brand-primary hover:bg-brand-secondary text-white p-3 rounded-xl transition-all active:scale-95 shadow-lg shadow-brand-primary/20 flex items-center justify-center group"
+                >
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 transform group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase.js"></script>
+
+    <script>
+        // Configuration
+        const config = {
+            databaseURL: "https://alamterapi1-default-rtdb.firebaseio.com"
+        };
+        firebase.initializeApp(config);
+        const db = firebase.database();
+
+        // User Identity
+        let userId = localStorage.getItem("userId");
+        if(!userId){
+            userId = "user_" + Math.random().toString(36).substr(2,9);
+            localStorage.setItem("userId", userId);
+        }
+
+        // Auto-expand textarea
+        const tx = document.getElementById('msg');
+        tx.addEventListener("input", function() {
+            this.style.height = "auto";
+            this.style.height = (this.scrollHeight) + "px";
+        }, false);
+
+        // Send Message
+        function kirim() {
+            const msgInput = document.getElementById("msg");
+            const pesan = msgInput.value.trim();
+
+            if(pesan === "") return;
+
+            db.ref("chat/" + userId).push({
+                pengirim: "customer",
+                pesan: pesan,
+                waktu: Date.now()
+            });
+
+            msgInput.value = "";
+            msgInput.style.height = "auto";
+        }
+
+        // Receive Message & UI Update
+        db.ref("chat/" + userId).on("child_added", snap => {
+            const d = snap.val();
+            const chatContainer = document.getElementById("chat");
+            
+            const wrapper = document.createElement("div");
+            wrapper.className = `flex flex-col ${d.pengirim === "customer" ? 'items-end' : 'items-start'} space-y-1 animate-slide-in mb-4`;
+
+            const bubbleClass = d.pengirim === "customer" ? 'bubble-me' : 'bubble-admin';
+            const textClass = d.pengirim === "customer" ? 'text-gray-800' : 'text-gray-800';
+            
+            // Format time
+            const date = new Date(d.waktu);
+            const timeStr = date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+            wrapper.innerHTML = `
+                <div class="${bubbleClass} max-w-[85%] sm:max-w-[70%] p-4 rounded-2xl text-sm leading-relaxed ${textClass}">
+                    <p class="whitespace-pre-wrap">${escapeHTML(d.pesan)}</p>
+                    <span class="block text-[10px] opacity-60 mt-2 ${d.pengirim === "customer" ? 'text-right' : 'text-right'}">${timeStr}</span>
+                </div>
+            `;
+
+            chatContainer.appendChild(wrapper);
+            
+            // Smooth scroll to bottom
+            setTimeout(() => {
+                chatContainer.scrollTo({
+                    top: chatContainer.scrollHeight,
+                    behavior: 'smooth'
+                });
+            }, 100);
+        });
+
+        // Simple HTML Escaping
+        function escapeHTML(str) {
+            const p = document.createElement('p');
+            p.textContent = str;
+            return p.innerHTML;
+        }
+
+        // Subtle entry animations for UI
+        window.addEventListener('DOMContentLoaded', () => {
+            const header = document.querySelector('header');
+            const footer = document.querySelector('section');
+            header.style.opacity = '0';
+            footer.style.opacity = '0';
+            
+            setTimeout(() => {
+                header.classList.add('transition-all', 'duration-700');
+                header.style.opacity = '1';
+                footer.classList.add('transition-all', 'duration-700');
+                footer.style.opacity = '1';
+            }, 100);
+        });
+    </script>
+</body>
+</html>

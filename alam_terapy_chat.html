@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ALAM TERAPY CHAT | Premium Counseling Hub</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#075E54',
+                        secondary: '#128C7E',
+                        accent: '#10b981',
+                        chatBg: '#e5ddd5',
+                        bubbleMe: '#DCF8C6',
+                        bubbleOther: '#ffffff',
+                        darkSlate: '#0f172a'
+                    },
+                    fontFamily: {
+                        display: ['Outfit', 'sans-serif'],
+                        body: ['Inter', 'sans-serif'],
+                    },
+                    boxShadow: {
+                        'glass': '0 8px 32px 0 rgba(31, 38, 135, 0.37)',
+                        'premium': '0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1)'
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #f8fafc;
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+        }
+
+        .glass-header {
+            background: rgba(7, 94, 84, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .chat-container {
+            height: calc(100vh - 140px);
+            scrollbar-width: thin;
+            scrollbar-color: #cbd5e1 transparent;
+        }
+
+        .chat-container::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .chat-container::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 10px;
+        }
+
+        .bubble-anim {
+            animation: slideUp 0.3s ease-out forwards;
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .login-gradient {
+            background: linear-gradient(135deg, #075E54 0%, #128C7E 100%);
+        }
+
+        /* Message Bubble Tail effect */
+        .bubble-me::after {
+            content: '';
+            position: absolute;
+            right: -8px;
+            top: 0;
+            width: 0;
+            height: 0;
+            border-left: 10px solid #DCF8C6;
+            border-bottom: 10px solid transparent;
+        }
+
+        .bubble-other::after {
+            content: '';
+            position: absolute;
+            left: -8px;
+            top: 0;
+            width: 0;
+            height: 0;
+            border-right: 10px solid #ffffff;
+            border-bottom: 10px solid transparent;
+        }
+    </style>
+</head>
+<body class="bg-chatBg">
+
+    <!-- HEADER -->
+    <header class="header fixed top-0 w-full z-50 glass-header py-4 px-6 flex justify-between items-center shadow-lg">
+        <div class="flex items-center gap-3">
+            <div class="w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-md">
+                <span class="text-primary font-bold text-xl">A</span>
+            </div>
+            <h1 class="font-display font-bold text-white text-lg tracking-tight">ALAM TERAPY CHAT</h1>
+        </div>
+        <div id="userInfo" class="hidden flex items-center gap-4">
+            <span id="namaUser" class="text-white/90 text-sm font-medium"></span>
+            <button onclick="logout()" class="bg-red-500 hover:bg-red-600 transition-colors text-white text-xs px-3 py-1.5 rounded-full font-semibold uppercase tracking-wider">Keluar</button>
+        </div>
+    </header>
+
+    <!-- AUTHENTICATION VIEW -->
+    <main id="loginBox" class="min-h-screen flex items-center justify-center p-6 login-gradient">
+        <div class="w-full max-w-md bg-white rounded-3xl shadow-2xl p-8 transform transition-all">
+            <div class="text-center mb-8">
+                <h2 class="font-display text-3xl font-bold text-slate-800 mb-2">Selamat Datang</h2>
+                <p class="text-slate-500 text-sm">Silakan masuk untuk memulai sesi terapi chat</p>
+            </div>
+            
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-1 ml-1">Nama Lengkap</label>
+                    <input type="text" id="nama" placeholder="Masukkan nama Anda..." 
+                        class="w-full px-5 py-4 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all text-slate-700">
+                </div>
+                
+                <div id="adminFields">
+                    <label class="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-1 ml-1">Password (Opsional Admin)</label>
+                    <input type="password" id="pass" placeholder="••••••••" 
+                        class="w-full px-5 py-4 bg-slate-50 border border-slate-200 rounded-2xl focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all text-slate-700">
+                </div>
+
+                <button onclick="login()" class="w-full bg-primary hover:bg-secondary text-white font-bold py-4 rounded-2xl shadow-lg transition-all transform hover:-translate-y-1 active:scale-95 mt-4">
+                    Mulai Sesi Chat
+                </button>
+            </div>
+            
+            <p class="mt-8 text-center text-slate-400 text-xs">Aman & Terenkripsi secara end-to-end</p>
+        </div>
+    </main>
+
+    <!-- COMMUNICATION VIEW -->
+    <main id="chatBox" class="hidden pt-20">
+        <!-- Messages Area -->
+        <div id="chat" class="chat-container px-4 py-6 overflow-y-auto flex flex-col gap-4">
+            <!-- Bubbles will be injected here -->
+        </div>
+
+        <!-- Input Bar -->
+        <footer class="fixed bottom-0 w-full bg-white border-t border-slate-200 p-4 shadow-[0_-5px_15px_rgba(0,0,0,0.05)]">
+            <div class="max-w-4xl mx-auto flex items-center gap-3">
+                <div class="relative flex-1">
+                    <input type="text" id="pesan" placeholder="Ketik pesan di sini..." 
+                        class="w-full pl-6 pr-12 py-4 bg-slate-100 border-none rounded-full focus:ring-2 focus:ring-primary outline-none transition-all text-slate-700"
+                        onkeypress="if(event.key === 'Enter') kirim()">
+                </div>
+                <button onclick="kirim()" class="bg-primary hover:bg-secondary text-white p-4 rounded-full shadow-md transition-all active:scale-90 flex items-center justify-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+                    </svg>
+                </button>
+            </div>
+        </footer>
+    </main>
+
+    <!-- FIREBASE & LOGIC -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+
+    <script>
+        // Firebase Configuration
+        const firebaseConfig = {
+            databaseURL: "https://alamterapi1-default-rtdb.firebaseio.com"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.database();
+        const chatRef = db.ref("chat");
+
+        // App State
+        const user = localStorage.getItem("nama");
+        const isAdmin = localStorage.getItem("admin") === "true";
+        const notificationSound = new Audio("https://www.soundjay.com/buttons/sounds/button-3.mp3");
+
+        // Authentication Flow
+        function login() {
+            const namaInput = document.getElementById("nama").value.trim();
+            const passInput = document.getElementById("pass").value.trim();
+
+            if (!namaInput) {
+                alert("Harap masukkan nama Anda");
+                return;
+            }
+
+            if (namaInput === "AdminAlam" && passInput === "alam12345") {
+                localStorage.setItem("admin", "true");
+            } else {
+                localStorage.setItem("admin", "false");
+            }
+
+            localStorage.setItem("nama", namaInput);
+            location.reload();
+        }
+
+        function logout() {
+            localStorage.removeItem("nama");
+            localStorage.removeItem("admin");
+            location.reload();
+        }
+
+        // Initialize UI State
+        if (user) {
+            document.getElementById("loginBox").classList.add("hidden");
+            document.getElementById("chatBox").classList.remove("hidden");
+            document.getElementById("userInfo").classList.remove("hidden");
+            document.getElementById("namaUser").innerText = user + (isAdmin ? " (Admin)" : "");
+            document.body.classList.remove("login-gradient");
+        }
+
+        // Message Logic
+        function kirim() {
+            const pesanInput = document.getElementById("pesan");
+            const pesan = pesanInput.value.trim();
+
+            if (!pesan) return;
+
+            // Push to Firebase
+            chatRef.push({
+                nama: user,
+                pesan: pesan,
+                waktu: Date.now()
+            });
+
+            // Message Capping Logic (50 limit)
+            chatRef.once("value", (snapshot) => {
+                const total = snapshot.numChildren();
+                if (total > 50) {
+                    const hapusJumlah = total - 50;
+                    let i = 0;
+                    snapshot.forEach((child) => {
+                        if (i < hapusJumlah) {
+                            db.ref("chat/" + child.key).remove();
+                        }
+                        i++;
+                    });
+                }
+            });
+
+            pesanInput.value = "";
+            pesanInput.focus();
+        }
+
+        function hapus(id) {
+            if (confirm("Hapus pesan ini secara permanen?")) {
+                db.ref("chat/" + id).remove();
+            }
+        }
+
+        // Real-time Listener
+        chatRef.orderByChild("waktu").on("value", (snapshot) => {
+            const chatDiv = document.getElementById("chat");
+            let chatHTML = "";
+            
+            snapshot.forEach((child) => {
+                const data = child.val();
+                const id = child.key;
+                const isMe = data.nama === user;
+                const bubbleClass = isMe ? "me" : "other";
+                
+                chatHTML += `
+                    <div class="flex flex-col ${isMe ? 'items-end' : 'items-start'} bubble-anim">
+                        <div class="relative max-w-[85%] md:max-w-[70%] px-4 py-3 rounded-2xl shadow-sm ${isMe ? 'bg-bubbleMe text-slate-800 rounded-tr-none' : 'bg-bubbleOther text-slate-800 rounded-tl-none'}">
+                            <div class="flex justify-between items-start gap-4 mb-1">
+                                <span class="text-[10px] font-bold uppercase tracking-wider ${isMe ? 'text-primary' : 'text-secondary'}">
+                                    ${data.nama}
+                                </span>
+                                ${(isMe || isAdmin) ? `<button onclick="hapus('${id}')" class="text-[10px] text-red-400 hover:text-red-600 font-bold uppercase transition-colors">Hapus</button>` : ''}
+                            </div>
+                            <p class="text-[15px] leading-relaxed">${data.pesan}</p>
+                            <span class="block text-[9px] text-slate-400 mt-1 text-right">
+                                ${new Date(data.waktu).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                            </span>
+                        </div>
+                    </div>
+                `;
+            });
+
+            const wasAtBottom = chatDiv.scrollHeight - chatDiv.scrollTop <= chatDiv.clientHeight + 100;
+            
+            chatDiv.innerHTML = chatHTML;
+
+            // Auto-scroll and Sound
+            if (chatHTML !== "") {
+                chatDiv.scrollTop = chatDiv.scrollHeight;
+                // Only play sound if the new content is an incoming message
+                const lastMessage = snapshot.val();
+                if (lastMessage) {
+                    const keys = Object.keys(lastMessage);
+                    const newest = lastMessage[keys[keys.length - 1]];
+                    if (newest.nama !== user) {
+                        notificationSound.play().catch(e => console.log("Sound interaction required"));
+                    }
+                }
+            }
+        });
+
+    </script>
+</body>
+</html>

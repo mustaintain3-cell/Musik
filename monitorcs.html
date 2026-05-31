@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat Admin | Premium Support</title>
+    <!-- Google Fonts: Inter & Outfit -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Outfit:wght@600;700;800&display=swap" rel="stylesheet">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            primary: '#8b5cf6', // Electric Violet
+                            dark: '#0f172a',    // Deep Slate
+                            surface: '#1e293b', // Lighter Slate
+                            accent: '#10b981',  // Emerald
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        display: ['Outfit', 'sans-serif'],
+                    },
+                    animation: {
+                        'fade-in-up': 'fadeInUp 0.5s ease-out forwards',
+                        'slide-in': 'slideIn 0.3s ease-out forwards',
+                    },
+                    keyframes: {
+                        fadeInUp: {
+                            '0%': { opacity: '0', transform: 'translateY(20px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        },
+                        slideIn: {
+                            '0%': { opacity: '0', transform: 'translateX(-10px)' },
+                            '100%': { opacity: '1', transform: 'translateX(0)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Glassmorphism utility */
+        .glass {
+            background: rgba(15, 23, 42, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .chat-container::-webkit-scrollbar {
+            width: 6px;
+        }
+        .chat-container::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+        }
+        .chat-container::-webkit-scrollbar-thumb {
+            background: rgba(139, 92, 246, 0.3);
+            border-radius: 10px;
+        }
+        .chat-container::-webkit-scrollbar-thumb:hover {
+            background: rgba(139, 92, 246, 0.6);
+        }
+
+        .bubble-customer {
+            background: linear-gradient(135deg, #8b5cf6, #7c3aed);
+            box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);
+        }
+
+        .bubble-admin {
+            background: rgba(30, 41, 59, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        input:focus {
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(139, 92, 246, 0.5);
+        }
+    </style>
+</head>
+<body class="bg-brand-dark text-slate-200 font-sans min-h-screen flex flex-col">
+
+    <!-- Sticky Header -->
+    <header class="fixed top-0 w-full z-50 glass px-6 py-4">
+        <div class="max-w-6xl mx-auto flex justify-between items-center">
+            <div class="flex items-center gap-2">
+                <div class="w-8 h-8 bg-brand-primary rounded-lg flex items-center justify-center">
+                    <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"></path></svg>
+                </div>
+                <h1 class="font-display text-xl font-bold tracking-tight text-white">Chat Admin</h1>
+            </div>
+            <nav class="hidden md:flex gap-8 text-sm font-medium text-slate-400">
+                <a href="#" class="hover:text-brand-primary transition-colors">Dashboard</a>
+                <a href="#" class="hover:text-brand-primary transition-colors">Settings</a>
+                <a href="#" class="hover:text-brand-primary transition-colors">Support</a>
+            </nav>
+            <div class="flex items-center gap-3">
+                <span class="relative flex h-3 w-3">
+                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand-accent opacity-75"></span>
+                    <span class="relative inline-flex rounded-full h-3 w-3 bg-brand-accent"></span>
+                </span>
+                <span class="text-xs font-semibold uppercase tracking-widest text-slate-400">Online</span>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-grow pt-24 pb-12 px-4 flex flex-col items-center justify-center max-w-4xl mx-auto w-full">
+        <!-- Hero Context -->
+        <div class="text-center mb-10 animate-fade-in-up">
+            <h2 class="text-4xl md:text-5xl font-display font-extrabold text-white mb-4 leading-tight">
+                Premium Support <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-primary to-purple-400">Interface</span>
+            </h2>
+            <p class="text-slate-400 max-w-xl mx-auto text-lg">
+                Real-time synchronized communication powered by Firebase. Connect instantly with our administrative team.
+            </p>
+        </div>
+
+        <!-- Chat Component Card -->
+        <div class="w-full bg-brand-surface rounded-3xl shadow-2xl overflow-hidden border border-slate-700/50 flex flex-col animate-fade-in-up" style="height: 600px;">
+            <!-- Chat Header -->
+            <div class="p-5 border-b border-slate-700/50 bg-slate-800/30 flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-full bg-slate-700 flex items-center justify-center border border-slate-600">
+                        <span class="text-sm font-bold text-slate-300">AD</span>
+                    </div>
+                    <div>
+                        <p class="text-sm font-semibold text-white">Administrator</p>
+                        <p class="text-[10px] text-slate-500 uppercase tracking-wider">Verified Agent</p>
+                    </div>
+                </div>
+                <button class="p-2 hover:bg-slate-700 rounded-full transition-colors text-slate-400">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z"></path></svg>
+                </button>
+            </div>
+
+            <!-- Messages Area -->
+            <div id="chat" class="chat-container flex-grow overflow-y-auto p-6 flex flex-col gap-4">
+                <!-- Initial Welcome Message -->
+                <div class="flex flex-col items-start max-w-[80%] animate-slide-in">
+                    <div class="bubble-admin text-slate-200 px-4 py-3 rounded-2xl rounded-tl-none text-sm leading-relaxed">
+                        Welcome to the secure portal. How can we assist you today?
+                    </div>
+                    <span class="text-[10px] text-slate-500 mt-1 ml-1">System • Now</span>
+                </div>
+            </div>
+
+            <!-- Input Area -->
+            <div class="p-4 bg-slate-800/50 border-t border-slate-700/50">
+                <div class="relative flex items-center gap-2">
+                    <input type="text" id="pesan" 
+                        class="w-full bg-slate-900 border border-slate-700 text-white text-sm rounded-2xl px-5 py-4 focus:ring-2 focus:ring-brand-primary transition-all placeholder:text-slate-600" 
+                        placeholder="Type your message here..."
+                        onkeypress="if(event.key === 'Enter') kirim()">
+                    
+                    <button onclick="kirim()" 
+                        class="absolute right-2 p-3 bg-brand-primary hover:bg-brand-primary/80 text-white rounded-xl transition-all active:scale-95 shadow-lg flex items-center justify-center">
+                        <svg class="w-5 h-5 transform rotate-90" fill="currentColor" viewBox="0 0 20 20"><path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z"></path></svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Features Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-20 w-full">
+            <div class="p-8 bg-slate-800/30 border border-slate-700/50 rounded-3xl hover:border-brand-primary/50 transition-all group">
+                <div class="w-12 h-12 bg-brand-primary/10 rounded-2xl flex items-center justify-center mb-6 text-brand-primary group-hover:scale-110 transition-transform">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                </div>
+                <h3 class="text-white font-display text-xl mb-2">Instant Sync</h3>
+                <p class="text-slate-400 text-sm leading-relaxed">Experience zero latency with Firebase Real-time Database synchronization.</p>
+            </div>
+            <div class="p-8 bg-slate-800/30 border border-slate-700/50 rounded-3xl hover:border-brand-primary/50 transition-all group">
+                <div class="w-12 h-12 bg-brand-accent/10 rounded-2xl flex items-center justify-center mb-6 text-brand-accent group-hover:scale-110 transition-transform">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+                </div>
+                <h3 class="text-white font-display text-xl mb-2">End-to-End</h3>
+                <p class="text-slate-400 text-sm leading-relaxed">Your conversations are isolated by unique session IDs for maximum security.</p>
+            </div>
+            <div class="p-8 bg-slate-800/30 border border-slate-700/50 rounded-3xl hover:border-brand-primary/50 transition-all group">
+                <div class="w-12 h-12 bg-purple-500/10 rounded-2xl flex items-center justify-center mb-6 text-purple-400 group-hover:scale-110 transition-transform">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z"></path></svg>
+                </div>
+                <h3 class="text-white font-display text-xl mb-2">Bento UI</h3>
+                <p class="text-slate-400 text-sm leading-relaxed">Modern, responsive layouts designed for any device and screen resolution.</p>
+            </div>
+        </div>
+    </main>
+
+    <!-- Scripts -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase.js"></script>
+
+    <script>
+        // Firebase Configuration
+        const config = {
+            apiKey: "AIzaSyAYG9MhzNiYKUy8XdmYmKWIH-kMUpxvGzk",
+            authDomain: "alamterapi1.firebaseapp.com",
+            databaseURL: "https://alamterapi1-default-rtdb.firebaseio.com"
+        };
+
+        firebase.initializeApp(config);
+
+        // Session Management
+        let userId = localStorage.getItem("userId");
+        if (!userId) {
+            userId = 'user_' + Math.random().toString(36).substr(2, 9);
+            localStorage.setItem("userId", userId);
+        }
+
+        const chatContainer = document.getElementById("chat");
+        const messageInput = document.getElementById("pesan");
+
+        // Message Dispatch
+        function kirim() {
+            const pesan = messageInput.value.trim();
+            if (pesan === "") return;
+
+            firebase.database().ref("chat/" + userId).push({
+                pesan: pesan,
+                dari: "customer",
+                timestamp: Date.now()
+            });
+
+            messageInput.value = "";
+            messageInput.focus();
+        }
+
+        // Real-time Listener & UI Update
+        firebase.database().ref("chat/" + userId).on("child_added", function(snapshot) {
+            const data = snapshot.val();
+            const isCustomer = data.dari === "customer";
+            
+            const messageElement = document.createElement("div");
+            messageElement.className = `flex flex-col ${isCustomer ? 'items-end' : 'items-start'} max-w-[85%] animate-slide-in self-${isCustomer ? 'end' : 'start'}`;
+            
+            const bubbleClass = isCustomer ? 'bubble-customer text-white' : 'bubble-admin text-slate-200';
+            const roundedClass = isCustomer ? 'rounded-2xl rounded-tr-none' : 'rounded-2xl rounded-tl-none';
+            const senderLabel = isCustomer ? 'You' : 'Admin';
+            
+            messageElement.innerHTML = `
+                <div class="${bubbleClass} ${roundedClass} px-4 py-3 text-sm leading-relaxed">
+                    ${escapeHtml(data.pesan)}
+                </div>
+                <span class="text-[10px] text-slate-500 mt-1 mx-1">${senderLabel} • ${new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</span>
+            `;
+
+            chatContainer.appendChild(messageElement);
+            
+            // Smooth Scroll to bottom
+            chatContainer.scrollTo({
+                top: chatContainer.scrollHeight,
+                behavior: 'smooth'
+            });
+        });
+
+        // XSS Prevention
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // Handle enter key focus
+        window.onload = () => {
+            messageInput.focus();
+        }
+    </script>
+</body>
+</html>
