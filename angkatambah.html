@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Game Angka Jackpot</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <style>
+    body {
+      font-family: Arial;
+      text-align: center;
+      background: #111;
+      color: white;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(4, 75px);
+      gap: 8px;
+      justify-content: center;
+      margin-top: 20px;
+    }
+
+    .box {
+      width: 75px;
+      height: 75px;
+      background: #fff;
+      color: #000;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 22px;
+      font-weight: bold;
+      border-radius: 12px;
+      cursor: pointer;
+      box-shadow: 0 0 8px rgba(255,255,255,0.4);
+      transition: 0.2s;
+    }
+
+    .box:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 12px #00ffff;
+    }
+
+    .active {
+      background: #00ffcc !important;
+      box-shadow: 0 0 15px #00ffcc;
+    }
+
+    .hasil-box {
+      margin-top: 20px;
+      width: 300px;
+      height: 45px;
+      background: #222;
+      border-radius: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 10px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .hapus-hasil {
+      background: red;
+      padding: 4px 8px;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    .keypad {
+      margin-top: 20px;
+      display: grid;
+      grid-template-columns: repeat(3, 60px);
+      gap: 8px;
+      justify-content: center;
+    }
+
+    .btn {
+      background: #555;
+      padding: 12px;
+      font-size: 16px;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+
+    .btn:hover {
+      background: #00bcd4;
+    }
+
+    .jackpot-text {
+      font-size: 28px;
+      color: gold;
+      margin-top: 10px;
+      display: none;
+      text-shadow: 0 0 10px gold;
+    }
+  </style>
+</head>
+<body>
+
+<h3>🎮 Game Angka Jackpot</h3>
+
+<div class="grid" id="grid"></div>
+
+<div class="hasil-box">
+  <div id="hasil">0</div>
+  <div class="hapus-hasil" onclick="hapusHasil()">❌</div>
+</div>
+
+<div class="jackpot-text" id="jackpotText">🎰 JACKPOT!!! 🎰</div>
+
+<div class="keypad">
+  <div class="btn" onclick="inputAngka(1)">1</div>
+  <div class="btn" onclick="inputAngka(2)">2</div>
+  <div class="btn" onclick="inputAngka(3)">3</div>
+  <div class="btn" onclick="inputAngka(4)">4</div>
+  <div class="btn" onclick="inputAngka(5)">5</div>
+  <div class="btn" onclick="inputAngka(6)">6</div>
+  <div class="btn" onclick="inputAngka(7)">7</div>
+  <div class="btn" onclick="inputAngka(8)">8</div>
+  <div class="btn" onclick="inputAngka(9)">9</div>
+  <div class="btn" onclick="hapus()">⌫</div>
+  <div class="btn" onclick="inputAngka(0)">0</div>
+  <div class="btn" onclick="resetSemua()">C</div>
+</div>
+
+<!-- SOUND -->
+<audio id="klik" src="https://www.soundjay.com/button/button-16.mp3"></audio>
+<audio id="jackpotSound" src="https://www.soundjay.com/misc/sounds/bell-ringing-05.mp3"></audio>
+
+<script>
+let grid = document.getElementById("grid");
+let kotakAktif = null;
+let daftarKlik = [];
+
+// buat kotak
+for (let i = 0; i < 16; i++) {
+  let div = document.createElement("div");
+  div.className = "box";
+  div.innerText = "0";
+
+  div.onclick = function () {
+    document.getElementById("klik").play();
+    pilihKotak(this);
+    tambahHitung(this);
+  };
+
+  grid.appendChild(div);
+}
+
+function pilihKotak(el) {
+  document.querySelectorAll(".box").forEach(k => k.classList.remove("active"));
+  el.classList.add("active");
+  kotakAktif = el;
+}
+
+function inputAngka(num) {
+  if (!kotakAktif) return;
+
+  let angka = kotakAktif.innerText;
+  if (angka === "0") angka = "";
+
+  angka += num;
+
+  if (parseInt(angka) > 10000) return;
+
+  kotakAktif.innerText = angka;
+}
+
+function hapus() {
+  if (!kotakAktif) return;
+
+  let angka = kotakAktif.innerText;
+  angka = angka.slice(0, -1);
+
+  if (angka === "") angka = "0";
+
+  kotakAktif.innerText = angka;
+}
+
+function tambahHitung(el) {
+  let nilai = parseInt(el.innerText);
+  daftarKlik.push(nilai);
+  hitungTotal();
+}
+
+function hitungTotal() {
+  let total = daftarKlik.reduce((a, b) => a + b, 0);
+  document.getElementById("hasil").innerText = total;
+
+  if (total >= 10000) {
+    jackpot();
+  }
+}
+
+function jackpot() {
+  document.getElementById("jackpotSound").play();
+
+  let text = document.getElementById("jackpotText");
+  text.style.display = "block";
+
+  let boxes = document.querySelectorAll(".box");
+
+  boxes.forEach((box, i) => {
+    setTimeout(() => {
+      box.style.background = "gold";
+      box.style.boxShadow = "0 0 20px gold";
+    }, i * 50);
+  });
+
+  setTimeout(() => {
+    boxes.forEach(box => {
+      box.style.background = "#fff";
+      box.style.boxShadow = "0 0 8px rgba(255,255,255,0.4)";
+    });
+    text.style.display = "none";
+  }, 2000);
+}
+
+function hapusHasil() {
+  daftarKlik = [];
+  document.getElementById("hasil").innerText = "0";
+}
+
+function resetSemua() {
+  hapusHasil();
+  document.querySelectorAll(".box").forEach(k => k.innerText = "0");
+}
+</script>
+
+</body>
+</html>
