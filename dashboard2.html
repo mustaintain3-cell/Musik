@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="id" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ALAMTERAPY | Premium Admin Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=Plus+Jakarta+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#10b981', // Emerald
+                        secondary: '#8b5cf6', // Violet
+                        darkBg: '#0f172a', // Deep Slate
+                        darkCard: '#1e293b',
+                        accent: '#34d399',
+                    },
+                    fontFamily: {
+                        display: ['Outfit', 'sans-serif'],
+                        body: ['Plus Jakarta Sans', 'sans-serif'],
+                    },
+                    animation: {
+                        'fade-in-up': 'fadeInUp 0.5s ease-out forwards',
+                        'pulse-subtle': 'pulseSubtle 2s infinite',
+                    },
+                    keyframes: {
+                        fadeInUp: {
+                            '0%': { opacity: '0', transform: 'translateY(10px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        },
+                        pulseSubtle: {
+                            '0%, 100%': { opacity: '1' },
+                            '50%': { opacity: '0.7' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #0f172a;
+            color: #f8fafc;
+        }
+
+        .glass {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .sidebar-link {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .sidebar-link.active {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+        }
+
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+        }
+
+        #chatBox div {
+            animation: fadeInUp 0.3s ease-out;
+        }
+
+        /* Mobile Overlay */
+        #sidebar-overlay {
+            display: none;
+        }
+        @media (max-width: 1024px) {
+            #sidebar-overlay.active {
+                display: block;
+            }
+        }
+    </style>
+</head>
+<body class="overflow-x-hidden">
+
+    <!-- Mobile Header -->
+    <header class="lg:hidden fixed top-0 left-0 right-0 z-50 glass h-16 flex items-center justify-between px-6">
+        <h1 class="font-display font-bold text-xl tracking-tight text-primary">ALAMTERAPY</h1>
+        <button onclick="toggleMobileMenu()" class="p-2 text-white">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+        </button>
+    </header>
+
+    <!-- Sidebar Overlay -->
+    <div id="sidebar-overlay" onclick="toggleMobileMenu()" class="fixed inset-0 bg-black/60 z-40 backdrop-blur-sm"></div>
+
+    <!-- Sidebar -->
+    <aside id="sidebar" class="fixed left-0 top-0 h-full w-64 glass border-r border-white/10 z-50 transition-transform duration-300 -translate-x-full lg:translate-x-0 overflow-y-auto">
+        <div class="p-8">
+            <h2 class="font-display font-bold text-2xl tracking-tighter text-white mb-10 flex items-center">
+                <span class="w-8 h-8 bg-primary rounded-lg mr-3 flex items-center justify-center text-darkBg shadow-lg shadow-primary/20">A</span>
+                ALAMTERAPY
+            </h2>
+            
+            <nav class="space-y-2">
+                <p class="text-xs font-semibold text-slate-500 uppercase tracking-widest mb-4 ml-2">Menu Utama</p>
+                
+                <button onclick="showView('dashboard')" id="nav-dashboard" class="sidebar-link active w-full flex items-center px-4 py-3 rounded-xl text-sm font-medium">
+                    <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
+                    Dashboard
+                </button>
+
+                <button onclick="showView('order')" id="nav-order" class="sidebar-link w-full flex items-center px-4 py-3 rounded-xl text-sm font-medium hover:bg-white/5 text-slate-400 hover:text-white">
+                    <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg>
+                    Order Masuk
+                </button>
+
+                <button onclick="showView('terapis')" id="nav-terapis" class="sidebar-link w-full flex items-center px-4 py-3 rounded-xl text-sm font-medium hover:bg-white/5 text-slate-400 hover:text-white">
+                    <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                    Data Terapis
+                </button>
+
+                <button onclick="showView('chat')" id="nav-chat" class="sidebar-link w-full flex items-center px-4 py-3 rounded-xl text-sm font-medium hover:bg-white/5 text-slate-400 hover:text-white">
+                    <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"></path></svg>
+                    Chat Center
+                </button>
+
+                <div class="pt-10">
+                    <p class="text-xs font-semibold text-slate-500 uppercase tracking-widest mb-4 ml-2">Support</p>
+                    <a href="https://wa.me/6281267604835" target="_blank" class="w-full flex items-center px-4 py-3 rounded-xl text-sm font-medium text-emerald-400 hover:bg-emerald-500/10 transition-colors">
+                        <svg class="w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.417-.003 6.557-5.338 11.892-11.893 11.892-1.997-.001-3.951-.5-5.688-1.448l-6.305 1.652zm6.599-3.819c1.556.925 3.129 1.414 4.75 1.415 5.181 0 9.397-4.215 9.399-9.396.001-2.51-.975-4.87-2.749-6.646s-4.135-2.752-6.645-2.752c-5.181 0-9.397 4.215-9.399 9.397-.001 1.793.513 3.535 1.488 5.039l-1.011 3.693 3.767-.988zm11.268-6.195c-.3-.15-1.774-.874-2.048-.974-.274-.1-.474-.15-.674.15-.2.3-.774.974-.948 1.174-.175.2-.35.225-.65.075-.3-.15-1.265-.467-2.41-1.487-.89-.793-1.49-1.773-1.665-2.073-.175-.3-.019-.461.13-.611.135-.134.3-.35.45-.525.15-.175.2-.3.3-.5.1-.2.05-.375-.025-.525-.075-.15-.674-1.624-.924-2.224-.244-.583-.491-.504-.674-.513-.175-.008-.375-.01-.575-.01s-.525.075-.8.375c-.275.3-1.05 1.024-1.05 2.5s1.075 2.9 1.225 3.1c.15.2 2.116 3.23 5.125 4.527.716.309 1.274.494 1.709.633.72.229 1.375.196 1.893.118.578-.088 1.774-.724 2.024-1.424.25-.7.25-1.3.175-1.424-.075-.125-.275-.2-.575-.35z"/></svg>
+                        WhatsApp Admin
+                    </a>
+                </div>
+            </nav>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="lg:ml-64 min-h-screen pt-24 lg:pt-10 px-6 pb-12">
+        <div class="max-w-6xl mx-auto">
+            
+            <!-- VIEW: DASHBOARD -->
+            <section id="dashboard" class="animate-fade-in-up">
+                <div class="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-4">
+                    <div>
+                        <h2 class="text-3xl font-display font-bold text-white mb-2">Selamat Datang, Admin</h2>
+                        <p class="text-slate-400">Monitoring operasional harian ALAMTERAPY.</p>
+                    </div>
+                    <div class="flex items-center space-x-3 bg-darkCard px-4 py-2 rounded-2xl border border-white/5">
+                        <span class="relative flex h-3 w-3">
+                            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
+                            <span class="relative inline-flex rounded-full h-3 w-3 bg-primary"></span>
+                        </span>
+                        <span class="text-sm font-medium">System Online</span>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <div class="lg:col-span-2 glass rounded-3xl p-8 overflow-hidden relative group">
+                        <div class="relative z-10">
+                            <h3 class="text-xl font-display font-semibold mb-4">Informasi Sistem</h3>
+                            <p class="text-slate-300 leading-relaxed">
+                                Dashboard ini terhubung langsung dengan Firebase Realtime Database. Semua perubahan pada data order dan status terapis akan diperbarui secara instan tanpa perlu memuat ulang halaman.
+                            </p>
+                        </div>
+                        <div class="absolute -right-10 -bottom-10 w-48 h-48 bg-primary/10 rounded-full blur-3xl group-hover:bg-primary/20 transition-all"></div>
+                    </div>
+
+                    <div class="glass rounded-3xl p-8 border-t-4 border-t-secondary">
+                        <h3 class="text-xl font-display font-semibold mb-4">Pusat Bantuan</h3>
+                        <p class="text-sm text-slate-400 mb-6 leading-relaxed">
+                            Butuh bantuan teknis atau koordinasi mendesak? Hubungi tim support melalui kanal di bawah ini.
+                        </p>
+                        <a href="https://wa.me/6281267604835" class="w-full inline-flex items-center justify-center px-6 py-3 rounded-xl bg-secondary text-white font-semibold hover:bg-secondary/80 transition-all shadow-lg shadow-secondary/20">
+                            Chat WhatsApp
+                        </a>
+                    </div>
+                </div>
+            </section>
+
+            <!-- VIEW: ORDER MASUK -->
+            <section id="order" class="hidden animate-fade-in-up">
+                <div class="mb-8">
+                    <h2 class="text-3xl font-display font-bold text-white mb-2">Order Masuk</h2>
+                    <p class="text-slate-400">Daftar pesanan layanan terapi terbaru secara real-time.</p>
+                </div>
+                
+                <div id="orderBox" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <!-- Dynamic orders injected here -->
+                    <div class="glass rounded-2xl p-6 border border-white/5 flex flex-col justify-center items-center text-center py-12 opacity-50">
+                        <svg class="w-12 h-12 mb-4 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"></path></svg>
+                        <p>Menunggu data order...</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- VIEW: TERAPIS -->
+            <section id="terapis" class="hidden animate-fade-in-up">
+                <div class="mb-8">
+                    <h2 class="text-3xl font-display font-bold text-white mb-2">Status Terapis</h2>
+                    <p class="text-slate-400">Monitoring kehadiran dan ketersediaan terapis lapangan.</p>
+                </div>
+                
+                <div id="terapisBox" class="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-4 gap-4">
+                    <!-- Dynamic therapist cards injected here -->
+                </div>
+            </section>
+
+            <!-- VIEW: CHAT -->
+            <section id="chat" class="hidden animate-fade-in-up h-[calc(100vh-12rem)] flex flex-col">
+                <div class="mb-6 flex items-center justify-between">
+                    <div>
+                        <h2 class="text-3xl font-display font-bold text-white mb-1">Live Chat</h2>
+                        <p class="text-slate-400 text-sm">Komunikasi langsung dengan pelanggan & terapis.</p>
+                    </div>
+                </div>
+                
+                <div class="glass rounded-3xl flex-1 flex flex-col overflow-hidden border border-white/10">
+                    <div id="chatBox" class="flex-1 p-6 overflow-y-auto space-y-4 custom-scrollbar bg-black/20">
+                        <!-- Dynamic messages injected here -->
+                        <div class="text-center py-10">
+                            <p class="text-slate-500 text-sm">Hubungkan dengan database untuk melihat pesan...</p>
+                        </div>
+                    </div>
+                    
+                    <div class="p-4 bg-darkCard/50 border-t border-white/10">
+                        <div class="flex items-center gap-3">
+                            <input id="pesan" type="text" placeholder="Ketik pesan balasan..." class="flex-1 bg-darkBg/50 border border-white/10 rounded-2xl px-6 py-3 focus:outline-none focus:border-primary transition-all text-white">
+                            <button onclick="kirim()" class="bg-primary hover:bg-primary/80 text-darkBg font-bold px-6 py-3 rounded-2xl transition-all shadow-lg shadow-primary/20 flex items-center">
+                                <span>Kirim</span>
+                                <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <!-- Firebase SDK (Version 8) -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase.js"></script>
+    <script>
+        // Configuration
+        const firebaseConfig = {
+            databaseURL: "https://alamterapi1-default-rtdb.firebaseio.com"
+        };
+        
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.database();
+
+        // UI Management
+        function showView(targetId) {
+            // Hide all sections
+            const sections = ['dashboard', 'order', 'terapis', 'chat'];
+            sections.forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.classList.add('hidden');
+                
+                const nav = document.getElementById('nav-' + id);
+                if (nav) {
+                    nav.classList.remove('active', 'bg-white/5', 'text-white');
+                    nav.classList.add('text-slate-400');
+                }
+            });
+
+            // Show selected
+            const activeSection = document.getElementById(targetId);
+            if (activeSection) activeSection.classList.remove('hidden');
+            
+            const activeNav = document.getElementById('nav-' + targetId);
+            if (activeNav) {
+                activeNav.classList.add('active');
+                activeNav.classList.remove('text-slate-400');
+            }
+
+            // Mobile close menu
+            if (window.innerWidth < 1024) {
+                toggleMobileMenu();
+            }
+        }
+
+        function toggleMobileMenu() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebar-overlay');
+            sidebar.classList.toggle('-translate-x-full');
+            overlay.classList.toggle('active');
+        }
+
+        // Chat Functionality
+        function kirim() {
+            const input = document.getElementById("pesan");
+            const text = input.value.trim();
+            
+            if (text !== "") {
+                db.ref("chat").push({
+                    pengirim: "Admin ALAMTERAPY",
+                    pesan: text,
+                    waktu: Date.now()
+                }).then(() => {
+                    input.value = "";
+                }).catch(err => {
+                    console.error("Gagal mengirim:", err);
+                    alert("Gagal mengirim pesan.");
+                });
+            }
+        }
+
+        // Listen for "Enter" in chat input
+        document.getElementById("pesan").addEventListener("keypress", function(e) {
+            if (e.key === "Enter") kirim();
+        });
+
+        // Real-time Listeners
+        
+        // 1. Chat Listener
+        db.ref("chat").on("child_added", (snapshot) => {
+            const data = snapshot.val();
+            const chatBox = document.getElementById("chatBox");
+            
+            // Remove placeholder if first message
+            if (chatBox.querySelector('p')) chatBox.innerHTML = '';
+
+            const isSelf = data.pengirim === "Admin ALAMTERAPY";
+            
+            const msgDiv = document.createElement("div");
+            msgDiv.className = `flex flex-col ${isSelf ? 'items-end' : 'items-start'}`;
+            
+            msgDiv.innerHTML = `
+                <div class="max-w-[80%] ${isSelf ? 'bg-primary text-darkBg' : 'bg-white/10 text-white'} px-4 py-3 rounded-2xl shadow-sm">
+                    <p class="text-xs opacity-60 font-bold mb-1 uppercase tracking-tighter">${data.pengirim}</p>
+                    <p class="text-sm leading-relaxed">${data.pesan}</p>
+                </div>
+                <span class="text-[10px] text-slate-500 mt-1 px-2">${new Date(data.waktu).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</span>
+            `;
+            
+            chatBox.appendChild(msgDiv);
+            chatBox.scrollTop = chatBox.scrollHeight;
+        });
+
+        // 2. Orders Listener
+        db.ref("orders").on("child_added", (snapshot) => {
+            const data = snapshot.val();
+            const orderBox = document.getElementById("orderBox");
+            
+            // Remove empty state
+            if (orderBox.children.length === 1 && orderBox.querySelector('.opacity-50')) {
+                orderBox.innerHTML = '';
+            }
+
+            const card = document.createElement("div");
+            card.className = "glass rounded-2xl p-6 border-l-4 border-l-primary hover:shadow-xl hover:shadow-primary/5 transition-all animate-fade-in-up";
+            card.innerHTML = `
+                <div class="flex justify-between items-start mb-4">
+                    <h4 class="font-display font-bold text-lg text-white">${data.nama || 'Pelanggan'}</h4>
+                    <span class="bg-primary/20 text-primary text-[10px] font-bold px-2 py-1 rounded-full uppercase">Baru</span>
+                </div>
+                <div class="space-y-2 text-sm">
+                    <div class="flex items-start text-slate-300">
+                        <svg class="w-4 h-4 mr-2 mt-1 text-primary shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                        <span>${data.alamat || 'Alamat tidak tersedia'}</span>
+                    </div>
+                    <div class="flex items-center text-slate-300">
+                        <svg class="w-4 h-4 mr-2 text-primary shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                        <span class="font-semibold text-white">${data.layanan || 'General Therapy'}</span>
+                    </div>
+                </div>
+                <button class="mt-6 w-full py-2 bg-white/5 hover:bg-white/10 rounded-xl text-xs font-bold transition-all border border-white/5">Proses Order</button>
+            `;
+            orderBox.prepend(card);
+        });
+
+        // 3. Therapist Listener
+        db.ref("therapists").on("value", (snapshot) => {
+            const terapisBox = document.getElementById("terapisBox");
+            terapisBox.innerHTML = '';
+            
+            const data = snapshot.val();
+            if (!data) {
+                terapisBox.innerHTML = '<div class="col-span-full py-12 text-center opacity-50">Belum ada data terapis.</div>';
+                return;
+            }
+
+            Object.keys(data).forEach(key => {
+                const item = data[key];
+                const status = item.status ? item.status.toLowerCase() : 'offline';
+                const statusColor = status === 'aktif' || status === 'online' ? 'bg-primary' : 'bg-slate-500';
+                
+                const card = document.createElement("div");
+                card.className = "glass rounded-2xl p-5 border border-white/5 group hover:bg-white/5 transition-all cursor-default";
+                card.innerHTML = `
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 rounded-full bg-gradient-to-br from-slate-700 to-slate-800 flex items-center justify-center text-lg font-bold border border-white/10">
+                            ${item.nama ? item.nama.charAt(0) : 'T'}
+                        </div>
+                        <div>
+                            <h4 class="font-semibold text-white group-hover:text-primary transition-colors">${item.nama || 'Terapis'}</h4>
+                            <div class="flex items-center mt-1">
+                                <span class="w-2 h-2 rounded-full ${statusColor} mr-2"></span>
+                                <span class="text-[10px] uppercase font-bold text-slate-400 tracking-wider">${status}</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                terapisBox.appendChild(card);
+            });
+        });
+    </script>
+</body>
+</html>
