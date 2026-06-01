@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ALAM TERAPY OTP Platform</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Firebase SDKs (v8) -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#8b5cf6', // Electric Violet
+                        accent: '#10b981',  // Emerald
+                        slate: {
+                            950: '#0f172a',
+                            900: '#1e293b',
+                            800: '#334155'
+                        }
+                    },
+                    fontFamily: {
+                        display: ['Outfit', 'sans-serif'],
+                        body: ['Plus Jakarta Sans', 'sans-serif'],
+                    },
+                    animation: {
+                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'fade-in-up': 'fadeInUp 0.6s ease-out forwards',
+                    },
+                    keyframes: {
+                        fadeInUp: {
+                            '0%': { opacity: '0', transform: 'translateY(20px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #0f172a;
+            color: #f8fafc;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3 {
+            font-family: 'Outfit', sans-serif;
+        }
+
+        .glass {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .gradient-text {
+            background: linear-gradient(135deg, #8b5cf6 0%, #10b981 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #334155;
+            border-radius: 10px;
+        }
+
+        #loginBox, #otpBox {
+            animation: fadeInUp 0.5s ease-out;
+        }
+
+        .sidebar-item.active {
+            background: rgba(139, 92, 246, 0.15);
+            border-right: 3px solid #8b5cf6;
+            color: #8b5cf6;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex items-center justify-center p-4">
+
+    <!-- Background Decorative Elements -->
+    <div class="fixed top-0 left-0 w-full h-full -z-10 overflow-hidden pointer-events-none">
+        <div class="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-primary/20 rounded-full blur-[120px]"></div>
+        <div class="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-accent/10 rounded-full blur-[120px]"></div>
+    </div>
+
+    <!-- LOGIN MODULE -->
+    <div id="loginBox" class="w-full max-w-md glass rounded-3xl p-8 shadow-2xl space-y-6">
+        <div class="text-center space-y-2">
+            <h1 class="text-4xl font-bold tracking-tight">ALAM <span class="gradient-text">TERAPY</span></h1>
+            <p class="text-slate-400">Sign in to your platform</p>
+        </div>
+
+        <div class="space-y-4">
+            <div class="space-y-2">
+                <label class="text-sm font-medium text-slate-300 ml-1">Full Name</label>
+                <input type="text" id="nama" placeholder="Enter your name" 
+                    class="w-full bg-slate-800/50 border border-slate-700 rounded-xl px-4 py-3 outline-none focus:border-primary transition-all text-white placeholder:text-slate-500">
+            </div>
+            <div class="space-y-2">
+                <label class="text-sm font-medium text-slate-300 ml-1">Phone Number</label>
+                <input type="tel" id="hp" placeholder="+62812345678" 
+                    class="w-full bg-slate-800/50 border border-slate-700 rounded-xl px-4 py-3 outline-none focus:border-primary transition-all text-white placeholder:text-slate-500">
+            </div>
+
+            <div id="recaptcha" class="flex justify-center py-2"></div>
+
+            <button onclick="kirimOTP()" class="w-full bg-primary hover:bg-primary/90 text-white font-bold py-4 rounded-xl transition-all active:scale-[0.98] shadow-lg shadow-primary/20">
+                Send OTP
+            </button>
+        </div>
+    </div>
+
+    <!-- OTP VERIFICATION MODULE -->
+    <div id="otpBox" class="hidden w-full max-w-md glass rounded-3xl p-8 shadow-2xl space-y-6">
+        <div class="text-center space-y-2">
+            <h2 class="text-3xl font-bold">Verify Code</h2>
+            <p class="text-slate-400">Enter the 6-digit code sent to your phone</p>
+        </div>
+
+        <div class="space-y-6">
+            <input type="text" id="kode" placeholder="· · · · · ·" 
+                class="w-full bg-slate-800/50 border border-slate-700 rounded-xl px-4 py-4 text-center text-2xl tracking-[1em] outline-none focus:border-primary transition-all text-white font-bold">
+            
+            <button onclick="verifikasiOTP()" class="w-full bg-accent hover:bg-accent/90 text-slate-900 font-bold py-4 rounded-xl transition-all active:scale-[0.98] shadow-lg shadow-accent/20">
+                Confirm & Access
+            </button>
+            <button onclick="location.reload()" class="w-full text-slate-400 text-sm hover:text-white transition-colors">
+                Change phone number?
+            </button>
+        </div>
+    </div>
+
+    <!-- DASHBOARD WORKSPACE -->
+    <div id="dashboard" class="hidden fixed inset-0 bg-slate-950 flex flex-col md:flex-row overflow-hidden">
+        
+        <!-- SIDEBAR -->
+        <aside class="w-full md:w-72 bg-slate-900/50 border-r border-slate-800 flex flex-col p-6 space-y-8 z-20">
+            <div class="flex items-center space-x-3 px-2">
+                <div class="w-10 h-10 bg-primary rounded-lg flex items-center justify-center font-bold text-white shadow-lg shadow-primary/30">A</div>
+                <span class="text-xl font-bold font-display tracking-tight">ALAM<span class="text-primary">TERAPY</span></span>
+            </div>
+
+            <nav class="flex-1 space-y-2">
+                <div onclick="menu('chat')" id="btn-chat" class="sidebar-item active flex items-center space-x-4 px-4 py-3 rounded-xl cursor-pointer transition-all hover:bg-slate-800/50 group">
+                    <svg class="w-5 h-5 opacity-70 group-hover:opacity-100" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"></path></svg>
+                    <span class="font-medium">Live Chat</span>
+                </div>
+                <div onclick="menu('order')" id="btn-order" class="sidebar-item flex items-center space-x-4 px-4 py-3 rounded-xl cursor-pointer transition-all hover:bg-slate-800/50 group">
+                    <svg class="w-5 h-5 opacity-70 group-hover:opacity-100" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg>
+                    <span class="font-medium">My Orders</span>
+                </div>
+                <div onclick="menu('data')" id="btn-data" class="sidebar-item flex items-center space-x-4 px-4 py-3 rounded-xl cursor-pointer transition-all hover:bg-slate-800/50 group">
+                    <svg class="w-5 h-5 opacity-70 group-hover:opacity-100" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                    <span class="font-medium">User Base</span>
+                </div>
+            </nav>
+
+            <button onclick="logout()" class="flex items-center space-x-4 px-4 py-3 rounded-xl cursor-pointer transition-all hover:bg-red-500/10 text-slate-400 hover:text-red-400 group">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
+                <span class="font-medium">Logout</span>
+            </button>
+        </aside>
+
+        <!-- MAIN CONTENT AREA -->
+        <main class="flex-1 overflow-y-auto bg-slate-950 p-6 md:p-10 relative">
+            <!-- Header for Mobile -->
+            <header class="flex md:hidden justify-between items-center mb-8">
+                <h2 id="mobileTitle" class="text-2xl font-bold">Dashboard</h2>
+                <div class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center">
+                    <div class="w-2 h-2 rounded-full bg-accent animate-pulse"></div>
+                </div>
+            </header>
+
+            <!-- CHAT MENU -->
+            <section id="chatMenu" class="h-full flex flex-col max-w-4xl mx-auto space-y-6">
+                <div class="space-y-1">
+                    <h2 class="text-3xl font-bold">Community Chat</h2>
+                    <p class="text-slate-400">Real-time messaging with other platform members</p>
+                </div>
+                
+                <div class="flex-1 glass rounded-3xl overflow-hidden flex flex-col">
+                    <div id="chat" class="flex-1 p-6 space-y-4 overflow-y-auto custom-scrollbar flex flex-col">
+                        <!-- Messages go here -->
+                        <div class="self-center bg-slate-800/50 px-4 py-1 rounded-full text-xs text-slate-500">Welcome to the discussion</div>
+                    </div>
+                    
+                    <div class="p-4 bg-slate-900/80 border-t border-slate-800 flex space-x-2">
+                        <input type="text" id="pesan" placeholder="Write a message..." 
+                            class="flex-1 bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 outline-none focus:border-primary transition-all text-white">
+                        <button onclick="kirimChat()" class="bg-primary hover:bg-primary/90 text-white p-3 rounded-xl transition-all shadow-lg shadow-primary/20">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path></svg>
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ORDER MENU -->
+            <section id="orderMenu" class="hidden h-full flex flex-col max-w-4xl mx-auto space-y-6">
+                <div class="flex justify-between items-end">
+                    <div class="space-y-1">
+                        <h2 class="text-3xl font-bold">Your Orders</h2>
+                        <p class="text-slate-400">Manage and track your active therapy requests</p>
+                    </div>
+                    <button onclick="buatOrder()" class="bg-accent hover:bg-accent/90 text-slate-900 font-bold px-6 py-2 rounded-full transition-all flex items-center space-x-2">
+                        <span class="text-lg">+</span> <span>New Order</span>
+                    </button>
+                </div>
+
+                <div id="order" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <!-- Orders go here -->
+                </div>
+            </section>
+
+            <!-- USER DATA MENU -->
+            <section id="dataMenu" class="hidden h-full flex flex-col max-w-4xl mx-auto space-y-6">
+                <div class="space-y-1">
+                    <h2 class="text-3xl font-bold">Platform Directory</h2>
+                    <p class="text-slate-400">View registered users and therapy specialists</p>
+                </div>
+
+                <div class="glass rounded-3xl overflow-hidden">
+                    <table class="w-full text-left">
+                        <thead class="bg-slate-800/50 border-b border-slate-700">
+                            <tr>
+                                <th class="px-6 py-4 text-sm font-semibold text-slate-400">Name</th>
+                                <th class="px-6 py-4 text-sm font-semibold text-slate-400">Contact</th>
+                                <th class="px-6 py-4 text-sm font-semibold text-slate-400">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="data">
+                            <!-- User data goes here -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        // FIREBASE CONFIGURATION
+        const firebaseConfig = {
+            apiKey: "AIzaSyB-D...", // Placeholder - Actual config would be here
+            authDomain: "alamterapi1.firebaseapp.com",
+            databaseURL: "https://alamterapi1-default-rtdb.firebaseio.com",
+            projectId: "alamterapi1",
+            storageBucket: "alamterapi1.appspot.com",
+            messagingSenderId: "367375685816",
+            appId: "1:367375685816:web:..."
+        };
+
+        // Initialize Firebase
+        if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
+        }
+        const db = firebase.database();
+        let confirmationResult;
+
+        window.onload = function() {
+            window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha', {
+                'size': 'normal',
+                'callback': (response) => { console.log("reCAPTCHA solved"); }
+            });
+        };
+
+        // AUTHENTICATION LOGIC
+        function kirimOTP() {
+            const hp = document.getElementById("hp").value;
+            const nama = document.getElementById("nama").value;
+
+            if (!hp || !nama) {
+                alert("Please fill in all fields.");
+                return;
+            }
+
+            const appVerifier = window.recaptchaVerifier;
+            firebase.auth().signInWithPhoneNumber(hp, appVerifier)
+                .then((result) => {
+                    confirmationResult = result;
+                    document.getElementById("loginBox").classList.add("hidden");
+                    document.getElementById("otpBox").classList.remove("hidden");
+                }).catch((error) => {
+                    alert("Error: " + error.message);
+                });
+        }
+
+        function verifikasiOTP() {
+            const kode = document.getElementById("kode").value;
+            confirmationResult.confirm(kode).then((result) => {
+                const user = result.user;
+                const nama = document.getElementById("nama").value;
+                const hp = document.getElementById("hp").value;
+
+                // Success
+                document.getElementById("otpBox").classList.add("hidden");
+                document.getElementById("dashboard").classList.remove("hidden");
+                document.body.classList.remove("flex", "items-center", "justify-center", "p-4");
+
+                // Push user data
+                db.ref("user").push({ nama: nama, hp: hp });
+
+                // Initialize listeners
+                loadChat();
+                loadOrder();
+                loadUser();
+            }).catch((error) => {
+                alert("Incorrect OTP code. Please try again.");
+            });
+        }
+
+        // NAVIGATION LOGIC
+        function menu(x) {
+            const sections = ['chatMenu', 'orderMenu', 'dataMenu'];
+            const btns = ['btn-chat', 'btn-order', 'btn-data'];
+            
+            sections.forEach(s => document.getElementById(s).classList.add("hidden"));
+            btns.forEach(b => document.getElementById(b).classList.remove("active"));
+
+            document.getElementById(x + 'Menu').classList.remove("hidden");
+            document.getElementById('btn-' + x).classList.add("active");
+            
+            // Mobile Title Update
+            const titles = { chat: 'Live Chat', order: 'My Orders', data: 'Directory' };
+            if (document.getElementById('mobileTitle')) {
+                document.getElementById('mobileTitle').innerText = titles[x];
+            }
+        }
+
+        // CHAT LOGIC
+        function kirimChat() {
+            const pesan = document.getElementById("pesan").value;
+            const nama = document.getElementById("nama").value;
+            if (pesan.trim() === "") return;
+
+            db.ref("chat").push({ 
+                msg: pesan, 
+                sender: nama, 
+                time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) 
+            });
+            document.getElementById("pesan").value = "";
+        }
+
+        function loadChat() {
+            db.ref("chat").on("child_added", (snapshot) => {
+                const data = snapshot.val();
+                const chatContainer = document.getElementById("chat");
+                const currentUserName = document.getElementById("nama").value;
+                const isMe = data.sender === currentUserName;
+
+                const msgDiv = document.createElement("div");
+                msgDiv.className = isMe ? "self-end max-w-[80%]" : "self-start max-w-[80%]";
+                
+                msgDiv.innerHTML = `
+                    <div class="flex flex-col ${isMe ? 'items-end' : 'items-start'}">
+                        <span class="text-[10px] text-slate-500 mb-1 px-1">${data.sender} • ${data.time || ''}</span>
+                        <div class="px-4 py-3 rounded-2xl ${isMe ? 'bg-primary text-white rounded-tr-none shadow-lg shadow-primary/20' : 'bg-slate-800 text-slate-100 rounded-tl-none border border-slate-700'}">
+                            ${data.msg}
+                        </div>
+                    </div>
+                `;
+                chatContainer.appendChild(msgDiv);
+                chatContainer.scrollTop = chatContainer.scrollHeight;
+            });
+        }
+
+        // ORDER LOGIC
+        function buatOrder() {
+            const nama = document.getElementById("nama").value;
+            db.ref("order").push({ 
+                order: "Full Body Therapy", 
+                customer: nama, 
+                status: "Pending",
+                date: new Date().toLocaleDateString()
+            });
+        }
+
+        function loadOrder() {
+            db.ref("order").on("child_added", (snapshot) => {
+                const data = snapshot.val();
+                const orderContainer = document.getElementById("order");
+                
+                const card = document.createElement("div");
+                card.className = "glass p-5 rounded-2xl border border-slate-800/50 hover:border-primary/30 transition-all group animate-fade-in-up";
+                card.innerHTML = `
+                    <div class="flex justify-between items-start mb-4">
+                        <div class="w-10 h-10 bg-accent/20 rounded-xl flex items-center justify-center text-accent">
+                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg>
+                        </div>
+                        <span class="px-3 py-1 bg-accent/10 text-accent text-xs font-bold rounded-full">${data.status || 'Active'}</span>
+                    </div>
+                    <h3 class="font-bold text-lg mb-1">${data.order}</h3>
+                    <p class="text-slate-400 text-sm mb-4">Request by ${data.customer}</p>
+                    <div class="pt-4 border-t border-slate-800 flex justify-between items-center">
+                        <span class="text-xs text-slate-500">${data.date || 'Today'}</span>
+                        <button class="text-xs font-bold text-primary opacity-0 group-hover:opacity-100 transition-opacity">VIEW DETAILS</button>
+                    </div>
+                `;
+                orderContainer.appendChild(card);
+            });
+        }
+
+        // USER LOGIC
+        function loadUser() {
+            db.ref("user").on("child_added", (snapshot) => {
+                const data = snapshot.val();
+                const userTable = document.getElementById("data");
+                
+                const row = document.createElement("tr");
+                row.className = "border-b border-slate-800/50 hover:bg-slate-800/30 transition-colors";
+                row.innerHTML = `
+                    <td class="px-6 py-4">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-8 h-8 rounded-full bg-slate-700 flex items-center justify-center text-xs font-bold">${data.nama.charAt(0)}</div>
+                            <span class="font-medium">${data.nama}</span>
+                        </div>
+                    </td>
+                    <td class="px-6 py-4 text-slate-400 font-mono text-sm">${data.hp}</td>
+                    <td class="px-6 py-4">
+                        <div class="flex items-center space-x-2">
+                            <div class="w-2 h-2 bg-accent rounded-full"></div>
+                            <span class="text-xs text-slate-300">Verified</span>
+                        </div>
+                    </td>
+                `;
+                userTable.appendChild(row);
+            });
+        }
+
+        function logout() {
+            if(confirm("Are you sure you want to logout?")) {
+                location.reload();
+            }
+        }
+    </script>
+</body>
+</html>
