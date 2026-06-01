@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Soul Family Reflexology | Premium Experience</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            dark: '#0a0a0a',
+                            surface: '#161616',
+                            accent: '#d4af37', // Gold accent
+                            muted: '#a1a1aa',
+                        }
+                    },
+                    fontFamily: {
+                        display: ['Playfair Display', 'serif'],
+                        body: ['Outfit', 'sans-serif'],
+                    },
+                    animation: {
+                        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'float': 'float 6s ease-in-out infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-10px)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #0a0a0a;
+            color: #ffffff;
+            font-family: 'Outfit', sans-serif;
+            overflow-x: hidden;
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .glass-card:hover {
+            background: rgba(255, 255, 255, 0.06);
+            border-color: rgba(212, 175, 55, 0.3);
+            transform: translateY(-5px);
+        }
+
+        .star-rating span {
+            cursor: pointer;
+            transition: transform 0.2s;
+            filter: grayscale(1);
+        }
+
+        .star-rating span.active {
+            filter: grayscale(0);
+            text-shadow: 0 0 15px rgba(212, 175, 55, 0.8);
+        }
+
+        .star-rating span:hover {
+            transform: scale(1.2);
+        }
+
+        .hero-gradient {
+            background: linear-gradient(180deg, rgba(10,10,10,0) 0%, rgba(10,10,10,1) 100%);
+        }
+
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #0a0a0a;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #d4af37;
+            border-radius: 10px;
+        }
+
+        .music-visualizer {
+            display: flex;
+            align-items: flex-end;
+            gap: 2px;
+            height: 20px;
+        }
+
+        .bar {
+            width: 3px;
+            background: #d4af37;
+            height: 20%;
+            transition: height 0.2s;
+        }
+
+        .playing .bar {
+            animation: bar-dance 1s ease-in-out infinite;
+        }
+
+        @keyframes bar-dance {
+            0%, 100% { height: 20%; }
+            50% { height: 100%; }
+        }
+
+        .bar:nth-child(2) { animation-delay: 0.2s; }
+        .bar:nth-child(3) { animation-delay: 0.4s; }
+        .bar:nth-child(4) { animation-delay: 0.1s; }
+    </style>
+</head>
+<body class="custom-scrollbar">
+
+    <!-- Hero Section -->
+    <header class="relative h-screen flex items-center justify-center overflow-hidden">
+        <!-- Hero Background Image (Using first provided image as main background) -->
+        <div class="absolute inset-0 z-0">
+            <div class="absolute inset-0 bg-black/40 z-10"></div>
+            <img src="https://opal.google/board/blobs/3697a464-058e-496b-a4da-8b8a4709b988" alt="Hero background" class="w-full h-full object-cover">
+            <div class="absolute inset-0 hero-gradient z-20"></div>
+        </div>
+
+        <div class="relative z-30 text-center px-6 max-w-4xl">
+            <span class="inline-block px-4 py-1 mb-6 text-xs tracking-[0.3em] uppercase bg-white/10 backdrop-blur-md rounded-full border border-white/20 animate-pulse-slow">
+                Experience Serenity
+            </span>
+            <h1 class="font-display text-5xl md:text-8xl font-bold mb-6 tracking-tight leading-none">
+                MY SOUL <span class="italic text-brand-accent">FAMILY</span>
+            </h1>
+            <p class="text-lg md:text-xl text-brand-muted max-w-2xl mx-auto font-light leading-relaxed">
+                Reflexology & Wellness center dedicated to restoring your body's natural harmony through expert hands and ancient techniques.
+            </p>
+            <div class="mt-10 flex flex-col md:flex-row gap-4 justify-center items-center">
+                <a href="#therapists" class="px-8 py-4 bg-brand-accent text-black font-bold rounded-full transition-transform hover:scale-105 active:scale-95 shadow-xl shadow-brand-accent/20">
+                    Review Our Specialists
+                </a>
+                <button onclick="document.getElementById('location').scrollIntoView()" class="px-8 py-4 bg-white/5 backdrop-blur-md border border-white/20 rounded-full hover:bg-white/10 transition-colors">
+                    Find Us
+                </button>
+            </div>
+        </div>
+
+        <!-- Scroll Indicator -->
+        <div class="absolute bottom-10 left-1/2 -translate-x-1/2 z-30 animate-float">
+            <div class="w-6 h-10 border-2 border-white/30 rounded-full flex justify-center p-1">
+                <div class="w-1 h-2 bg-brand-accent rounded-full"></div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Music Player (Floating Widget) -->
+    <div id="music-player" class="fixed bottom-6 right-6 z-50 glass-card p-4 rounded-2xl flex items-center gap-4 group">
+        <div class="hidden">
+            <audio id="audio-track" src="https://opal.google/board/blobs/3697a464-058e-496b-a4da-8b8a4709b9880" loop></audio>
+        </div>
+        <div class="music-visualizer" id="visualizer">
+            <div class="bar"></div>
+            <div class="bar"></div>
+            <div class="bar"></div>
+            <div class="bar"></div>
+        </div>
+        <div>
+            <p class="text-[10px] uppercase tracking-widest text-brand-muted leading-none mb-1">Now Playing</p>
+            <p class="text-sm font-semibold leading-none">Ambient Soul</p>
+        </div>
+        <button onclick="toggleMusic()" class="w-10 h-10 bg-brand-accent text-black rounded-full flex items-center justify-center hover:scale-110 transition-transform">
+            <svg id="play-icon" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd" />
+            </svg>
+            <svg id="pause-icon" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zM7 8a1 1 0 012 0v4a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v4a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
+            </svg>
+        </button>
+    </div>
+
+    <main class="container mx-auto px-6 py-24">
+        <!-- Section Header -->
+        <div id="therapists" class="text-center mb-20">
+            <h2 class="font-display text-4xl md:text-5xl font-bold mb-4">Our Elite Therapists</h2>
+            <div class="w-24 h-1 bg-brand-accent mx-auto mb-6"></div>
+            <p class="text-brand-muted max-w-xl mx-auto italic font-light">
+                Select your therapist and leave your heartfelt ulasan below. Your feedback helps us maintain the highest standards of service.
+            </p>
+        </div>
+
+        <!-- Therapist Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="list">
+            <!-- Dynamic content will be injected here -->
+        </div>
+
+        <!-- Location Section -->
+        <section id="location" class="mt-32 pt-24 border-t border-white/10">
+            <div class="glass-card rounded-[40px] p-8 md:p-16 flex flex-col md:flex-row items-center gap-12 overflow-hidden relative">
+                <div class="absolute top-0 right-0 w-64 h-64 bg-brand-accent/5 rounded-full blur-3xl -mr-32 -mt-32"></div>
+                
+                <div class="flex-1 space-y-6 relative z-10">
+                    <h3 class="font-display text-4xl font-bold">Visit Our Sanctuary</h3>
+                    <div class="space-y-4">
+                        <div class="flex items-start gap-4">
+                            <div class="mt-1 text-brand-accent italic font-bold">LOKASI:</div>
+                            <p class="text-brand-muted leading-relaxed">Ruko Bukit Dago, Gunung Sindur, Bogor, Jawa Barat</p>
+                        </div>
+                        <div class="flex items-start gap-4">
+                            <div class="mt-1 text-brand-accent italic font-bold">CONTACT:</div>
+                            <p class="text-brand-muted leading-relaxed">WhatsApp: +62 856-9705-0819</p>
+                        </div>
+                    </div>
+                    <div class="pt-6 flex gap-4">
+                        <button onclick="shareLink('whatsapp')" class="p-3 bg-white/5 rounded-full hover:bg-brand-accent hover:text-black transition-all">
+                            <svg class="w-6 h-6 fill-current" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.417-.003 6.557-5.338 11.892-11.893 11.892-1.997-.001-3.951-.5-5.688-1.448l-6.305 1.652zm6.599-3.852c1.856 1.088 3.742 1.594 5.236 1.594 5.43 0 9.848-4.417 9.85-9.847 0-2.628-1.024-5.1-2.883-6.958-1.859-1.859-4.331-2.883-6.958-2.883-5.432 0-9.85 4.418-9.852 9.849 0 2.256.772 3.927 1.554 5.385l-.945 3.454 3.553-.932-.555-.308zm8.515-4.883c-.272-.136-1.608-.794-1.857-.885-.249-.09-.431-.136-.612.136-.181.272-.703.885-.861 1.066-.159.181-.318.204-.59.068-.272-.136-1.15-.424-2.19-1.352-.809-.721-1.354-1.612-1.513-1.884-.159-.272-.017-.419.119-.554.122-.122.272-.318.408-.476.136-.159.181-.272.272-.454.09-.181.045-.34-.023-.476-.068-.136-.612-1.474-.839-2.02-.221-.535-.443-.463-.612-.471l-.522-.01c-.181 0-.476.068-.725.34-.249.272-.952.93-0.952 2.268s.975 2.631 1.111 2.812c.136.181 1.919 2.93 4.648 4.105.649.279 1.157.446 1.553.572.653.208 1.248.178 1.717.108.523-.078 1.608-.658 1.835-1.293.227-.635.227-1.18.159-1.293-.068-.113-.249-.181-.521-.317z"/></svg>
+                        </button>
+                        <button onclick="shareLink('twitter')" class="p-3 bg-white/5 rounded-full hover:bg-brand-accent hover:text-black transition-all">
+                            <svg class="w-6 h-6 fill-current" viewBox="0 0 24 24"><path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"/></svg>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="flex-1 w-full flex items-center justify-center p-4">
+                    <div class="relative group">
+                        <div class="absolute inset-0 bg-brand-accent/20 blur-2xl rounded-full scale-110 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                        <img src="https://opal.google/board/blobs/eaf0af44-73a1-4ff0-8348-14f87c406bb4" alt="Reflexology" class="rounded-3xl shadow-2xl relative z-10 w-full max-w-sm transform transition-transform group-hover:scale-[1.02]">
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        const noWA = "6285697050819";
+
+        // Media objects from the instructions
+        const mediaImages = [
+            "https://opal.google/board/blobs/3697a464-058e-496b-a4da-8b8a4709b988",
+            "https://opal.google/board/blobs/eaf0af44-73a1-4ff0-8348-14f87c406bb4",
+            "https://opal.google/board/blobs/d57a6e70-1493-4fc9-8dda-28763f24ae46",
+            "https://opal.google/board/blobs/8056f65a-51f6-419d-9fa2-8404cf4bc0f8",
+            "https://opal.google/board/blobs/9a0f522a-b0ed-4be4-993a-3157c71273a7",
+            "https://opal.google/board/blobs/0f43e333-f010-480f-8094-0c8eb5632a52",
+            "https://opal.google/board/blobs/a1453e4a-446d-45b8-9f83-b0c97ab1279b",
+            "https://opal.google/board/blobs/17934447-1034-41d7-b526-82f6bc0fc8b6",
+            "https://opal.google/board/blobs/6f468dd7-2d77-4f37-863a-15013204db32"
+        ];
+
+        const terapis = [
+            {nama:"Terapis 1 Pak Alam", foto: mediaImages[0]},
+            {nama:"Terapis 2 Pak Misdi", foto: mediaImages[1]},
+            {nama:"Terapis 3 Pak Nanang", foto: mediaImages[2]},
+            {nama:"Terapis 4 Pak Anto", foto: mediaImages[3]},
+            {nama:"Terapis 5 Pak Hendy", foto: mediaImages[4]},
+            {nama:"Terapis 6 Bu Fuqoh", foto: mediaImages[5]},
+            {nama:"Terapis 7 Bu Denty", foto: mediaImages[6]},
+            {nama:"Terapis 8 Bu Linda", foto: mediaImages[7]},
+            {nama:"Terapis 9 Bu Siti", foto: mediaImages[8]}
+        ];
+
+        const arti = [
+            "🌟 Baik",
+            "🌟🌟 Cukup Baik",
+            "🌟🌟🌟 Cukup Lumayan Baik",
+            "🌟🌟🌟🌟 PUAS",
+            "🌟🌟🌟🌟🌟 SANGAT PUAS"
+        ];
+
+        const list = document.getElementById("list");
+        let ratingState = {};
+
+        function init() {
+            terapis.forEach((t, index) => {
+                let card = document.createElement("div");
+                card.className = "glass-card rounded-[32px] p-6 flex flex-col group h-full";
+
+                let starsHTML = "";
+                for(let i=1; i<=5; i++){
+                    starsHTML += `<span onclick="pilihBintang(${index},${i})" id="s${index}-${i}" class="text-3xl">⭐</span>`;
+                }
+
+                card.innerHTML = `
+                    <div class="relative overflow-hidden rounded-2xl mb-6 h-64">
+                        <img src="${t.foto}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" alt="${t.nama}">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent flex items-end p-6">
+                            <h3 class="text-xl font-bold">${t.nama}</h3>
+                        </div>
+                    </div>
+                    
+                    <div class="space-y-4 flex-grow flex flex-col">
+                        <div class="flex flex-col items-center">
+                            <div class="star-rating flex gap-1 mb-2">
+                                ${starsHTML}
+                            </div>
+                            <div id="arti${index}" class="text-xs uppercase tracking-widest text-brand-accent font-bold opacity-0 transition-opacity">Select Rating</div>
+                        </div>
+
+                        <textarea id="ulasan${index}" 
+                            class="w-full bg-white/5 border border-white/10 rounded-xl p-4 text-sm focus:outline-none focus:border-brand-accent transition-colors flex-grow min-h-[100px]" 
+                            placeholder="Share your experience with ${t.nama.split(' ').slice(2).join(' ')}..."></textarea>
+
+                        <button onclick="kirim(${index})" class="w-full py-4 bg-white/5 border border-white/10 rounded-xl text-sm font-bold uppercase tracking-widest hover:bg-brand-accent hover:text-black transition-all">
+                            Send Feedback
+                        </button>
+                    </div>
+                `;
+                list.appendChild(card);
+            });
+        }
+
+        window.pilihBintang = function(id, nilai){
+            ratingState[id] = nilai;
+            const textEl = document.getElementById("arti"+id);
+            textEl.innerText = arti[nilai-1];
+            textEl.classList.remove("opacity-0");
+
+            for(let i=1; i<=5; i++){
+                let el = document.getElementById(`s${id}-${i}`);
+                if(i <= nilai) {
+                    el.classList.add("active");
+                } else {
+                    el.classList.remove("active");
+                }
+            }
+        }
+
+        window.kirim = function(id){
+            let nilai = ratingState[id] || 0;
+            let teks = document.getElementById("ulasan"+id).value;
+
+            if(nilai == 0){
+                alert("Please select a star rating first.");
+                return;
+            }
+
+            let pesan = `ULASAN MY SOUL FAMILY REFLEXOLOGY\n\nTerapis: ${terapis[id].nama}\nRating: ${arti[nilai-1]}\nUlasan: ${teks}\n\nLokasi: Ruko Bukit Dago Gunung Sindur Bogor Jawa Barat`;
+
+            let url = `https://wa.me/${noWA}?text=` + encodeURIComponent(pesan);
+            window.open(url, '_blank');
+        }
+
+        // Music Controls
+        const audio = document.getElementById('audio-track');
+        const visualizer = document.getElementById('visualizer');
+        const playIcon = document.getElementById('play-icon');
+        const pauseIcon = document.getElementById('pause-icon');
+        let isPlaying = false;
+
+        window.toggleMusic = function() {
+            if (isPlaying) {
+                audio.pause();
+                visualizer.classList.remove('playing');
+                playIcon.classList.remove('hidden');
+                pauseIcon.classList.add('hidden');
+            } else {
+                audio.play();
+                visualizer.classList.add('playing');
+                playIcon.classList.add('hidden');
+                pauseIcon.classList.remove('hidden');
+            }
+            isPlaying = !isPlaying;
+        }
+
+        // Share Link Functionality
+        window.shareLink = function(platform) {
+            const url = window.location.href;
+            const text = "Discover ultimate relaxation at My Soul Family Reflexology";
+            let shareUrl = '';
+
+            switch(platform) {
+                case 'whatsapp':
+                    shareUrl = `https://wa.me/?text=${encodeURIComponent(text + ' ' + url)}`;
+                    break;
+                case 'twitter':
+                    shareUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`;
+                    break;
+            }
+            if(shareUrl) window.open(shareUrl, '_blank');
+        }
+
+        // Initialize grid on load
+        init();
+
+    </script>
+</body>
+</html>
