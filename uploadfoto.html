@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alam Terapi | Secure Image Repository</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        nature: {
+                            50: '#f2f7f2',
+                            100: '#e1ede1',
+                            200: '#c6d9c6',
+                            300: '#a8c69f', // Sage Secondary
+                            400: '#6b9c66',
+                            500: '#2D5A27', // Forest Green Primary
+                            600: '#254a20',
+                            700: '#1e3b1a',
+                            800: '#182f15',
+                            900: '#142711',
+                        },
+                        accent: {
+                            soft: '#E67E22', // Soft Orange
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        display: ['Outfit', 'sans-serif'],
+                    },
+                    borderRadius: {
+                        'xl': '12px',
+                        '2xl': '24px',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #FAFAFA;
+            color: #1a1a1a;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .glass-header {
+            background: rgba(45, 90, 39, 0.9);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .hero-gradient {
+            background: linear-gradient(135deg, #2D5A27 0%, #1e3b1a 100%);
+        }
+
+        .upload-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(8px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+        }
+
+        .image-card {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            overflow: hidden;
+        }
+
+        .image-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
+        }
+
+        .image-card img {
+            transition: transform 0.6s ease;
+        }
+
+        .image-card:hover img {
+            transform: scale(1.08);
+        }
+
+        .custom-file-upload {
+            border: 2px dashed #a8c69f;
+            transition: all 0.3s ease;
+        }
+
+        .custom-file-upload:hover {
+            border-color: #2D5A27;
+            background: #f0f7ef;
+        }
+
+        .btn-primary {
+            background: #2D5A27;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 14px 0 rgba(45, 90, 39, 0.39);
+        }
+
+        .btn-primary:hover {
+            background: #254a20;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(45, 90, 39, 0.45);
+        }
+
+        .loader {
+            border-top-color: #2D5A27;
+            animation: spinner 0.6s linear infinite;
+        }
+
+        @keyframes spinner {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        #tampilFoto {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 24px;
+        }
+
+        .section-fade-in {
+            animation: fadeInUp 0.8s ease-out forwards;
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="font-sans">
+
+    <!-- Navigation -->
+    <nav class="glass-header fixed top-0 w-full z-50 h-[70px] flex items-center px-6 lg:px-12 transition-all">
+        <div class="max-w-7xl mx-auto w-full flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 bg-white/20 rounded-lg flex items-center justify-center">
+                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
+                    </svg>
+                </div>
+                <span class="text-white font-display font-extrabold text-2xl tracking-tight">ALAM TERAPI</span>
+            </div>
+            
+            <div id="authStatus" class="hidden md:flex items-center gap-4">
+                <span class="text-white/80 text-sm font-medium">Guest Access</span>
+                <div class="w-8 h-8 rounded-full bg-nature-300 border-2 border-white/20"></div>
+            </div>
+
+            <!-- Mobile Menu Toggle -->
+            <button class="md:hidden text-white">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-gradient pt-32 pb-20 px-6 text-center text-white relative overflow-hidden">
+        <div class="absolute top-0 left-0 w-full h-full opacity-10 pointer-events-none">
+            <svg class="w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none">
+                <path d="M0 100 C 20 0 50 0 100 100 Z" fill="white"></path>
+            </svg>
+        </div>
+        
+        <div class="max-w-4xl mx-auto relative z-10 section-fade-in">
+            <h1 class="text-5xl md:text-7xl font-display font-extrabold mb-6 leading-tight tracking-tight">
+                Abadikan <span class="text-nature-300">Ketenangan</span> Alam.
+            </h1>
+            <p class="text-lg md:text-xl text-nature-100 mb-10 max-w-2xl mx-auto font-light leading-relaxed">
+                Platform penyimpanan gambar eksklusif untuk koleksi terapi alam Anda. Simpan, kelola, dan bagikan momen kedamaian secara aman.
+            </p>
+            <a href="#upload-section" class="inline-block bg-white text-nature-500 font-bold px-8 py-4 rounded-full hover:bg-nature-50 transition-colors shadow-lg">
+                Mulai Mengunggah
+            </a>
+        </div>
+    </section>
+
+    <!-- Upload Section -->
+    <section id="upload-section" class="py-24 px-6 bg-[#F4F7F6]">
+        <div class="max-w-2xl mx-auto">
+            <div class="upload-card p-8 md:p-12 rounded-2xl section-fade-in" style="animation-delay: 0.2s;">
+                <div class="mb-8 text-center">
+                    <h2 class="text-3xl font-display font-bold text-gray-800 mb-2">Unggah Foto Baru</h2>
+                    <p class="text-gray-500">Pilih berkas citra alam terbaik untuk disimpan ke repositori.</p>
+                </div>
+
+                <div class="flex flex-col gap-6">
+                    <div class="relative">
+                        <label for="fileInput" class="custom-file-upload flex flex-col items-center justify-center p-10 rounded-xl cursor-pointer">
+                            <svg class="w-12 h-12 text-nature-300 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                            </svg>
+                            <span class="text-gray-600 font-medium" id="fileNameDisplay">Klik untuk pilih foto</span>
+                            <span class="text-xs text-gray-400 mt-2">JPG, PNG atau WebP (Maks. 5MB)</span>
+                        </label>
+                        <input type="file" id="fileInput" accept="image/*" class="hidden" onchange="updateFileName(this)">
+                    </div>
+
+                    <div class="space-y-2">
+                        <label class="text-sm font-semibold text-gray-700 ml-1">Keterangan Foto</label>
+                        <input type="text" id="ketInput" placeholder="Contoh: Senja di Hutan Pinus..." 
+                            class="w-full px-5 py-4 bg-white border border-gray-200 rounded-xl focus:ring-2 focus:ring-nature-500 focus:border-transparent outline-none transition-all">
+                    </div>
+
+                    <button onclick="prosesUnggah()" id="uploadBtn" class="btn-primary w-full text-white font-bold py-4 rounded-xl flex items-center justify-center gap-3">
+                        <span id="btnText">Unggah & Simpan Permanen</span>
+                        <div id="btnLoader" class="loader ease-linear rounded-full border-2 border-t-2 border-white h-5 w-5 hidden"></div>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Gallery Section -->
+    <section class="py-24 px-6 md:px-12 bg-white">
+        <div class="max-w-7xl mx-auto">
+            <div class="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
+                <div>
+                    <h2 class="text-4xl font-display font-extrabold text-gray-900 tracking-tight">Koleksi Alam Terapi</h2>
+                    <p class="text-gray-500 mt-2 text-lg">Menampilkan semua foto yang telah diabadikan oleh komunitas.</p>
+                </div>
+                <div class="flex items-center gap-2 text-nature-500 font-medium">
+                    <span id="imageCount">0</span> Gambar tersimpan
+                </div>
+            </div>
+
+            <!-- Dynamic Gallery Grid -->
+            <div id="tampilFoto" class="min-h-[400px]">
+                <!-- Cards injected via JS -->
+            </div>
+            
+            <!-- Empty State -->
+            <div id="emptyState" class="hidden text-center py-20">
+                <div class="inline-flex items-center justify-center w-20 h-20 bg-gray-100 rounded-full mb-4">
+                    <svg class="w-10 h-10 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                </div>
+                <h3 class="text-xl font-bold text-gray-800">Belum ada foto</h3>
+                <p class="text-gray-500">Mulai unggah foto pertama Anda hari ini.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Firebase SDK Logic -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js";
+        import { getDatabase, ref as dbRef, push, set, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+
+        // Configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyAYG9MhzNiYKUy8XdmYmKWIH-kMUpxvGzk",
+            authDomain: "alamterapi1.firebaseapp.com",
+            databaseURL: "https://alamterapi1-default-rtdb.firebaseio.com",
+            projectId: "alamterapi1",
+            storageBucket: "alamterapi1.firebasestorage.app",
+            messagingSenderId: "733767845112",
+            appId: "1:733767845112:web:b1e506cdcbca76d9fde70d",
+            measurementId: "G-5WJ4FGX8JC"
+        };
+
+        // Init
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const storage = getStorage(app);
+        const db = getDatabase(app);
+
+        // UI Helpers
+        window.updateFileName = (input) => {
+            const label = document.getElementById('fileNameDisplay');
+            if (input.files && input.files.length > 0) {
+                label.innerText = input.files[0].name;
+                label.classList.add('text-nature-600');
+            }
+        };
+
+        async function uploadDanSimpanFoto(file, keterangan = "") {
+            if (!file) {
+                alert("Silakan pilih foto terlebih dahulu.");
+                return;
+            }
+
+            const btn = document.getElementById('uploadBtn');
+            const loader = document.getElementById('btnLoader');
+            const btnText = document.getElementById('btnText');
+            const fileInputArea = document.getElementById('fileInput');
+
+            // Set Loading State
+            btn.disabled = true;
+            loader.classList.remove('hidden');
+            btnText.innerText = "Mengunggah...";
+
+            const namaUnik = Date.now() + "_" + file.name;
+            const lokasiSimpan = ref(storage, `foto_saya/${namaUnik}`);
+
+            try {
+                const hasilUnggah = await uploadBytes(lokasiSimpan, file);
+                const urlFoto = await getDownloadURL(hasilUnggah.ref);
+
+                const simpanKeDb = push(dbRef(db, "daftar_foto"));
+                await set(simpanKeDb, {
+                    url: urlFoto,
+                    namaAsli: file.name,
+                    keterangan: keterangan,
+                    waktu: new Date().toISOString()
+                });
+
+                // Success Feedback
+                alert("✅ Foto berhasil tersimpan secara permanen ke repositori Alam Terapi.");
+                
+                // Reset Form
+                document.getElementById("fileInput").value = "";
+                document.getElementById("ketInput").value = "";
+                document.getElementById('fileNameDisplay').innerText = "Klik untuk pilih foto";
+                
+            } catch (err) {
+                console.error("❌ Gagal:", err);
+                alert("Terjadi kesalahan saat mengunggah. Pastikan ukuran file tidak terlalu besar.");
+                fileInputArea.parentElement.classList.add('border-red-500');
+            } finally {
+                btn.disabled = false;
+                loader.classList.add('hidden');
+                btnText.innerText = "Unggah & Simpan Permanen";
+            }
+        }
+
+        window.prosesUnggah = function () {
+            const file = document.getElementById("fileInput").files[0];
+            const ket = document.getElementById("ketInput").value;
+            uploadDanSimpanFoto(file, ket);
+        }
+
+        function tampilkanSemuaFoto() {
+            const ambilData = dbRef(db, "daftar_foto");
+            const wadah = document.getElementById("tampilFoto");
+            const emptyState = document.getElementById("emptyState");
+            const countDisplay = document.getElementById("imageCount");
+
+            onValue(ambilData, (snapshot) => {
+                const data = snapshot.val();
+                wadah.innerHTML = "";
+                
+                if (!data) {
+                    emptyState.classList.remove('hidden');
+                    countDisplay.innerText = "0";
+                    return;
+                }
+
+                emptyState.classList.add('hidden');
+                const items = Object.entries(data).reverse(); // Newest first
+                countDisplay.innerText = items.length;
+
+                items.forEach(([id, item]) => {
+                    const { url, keterangan, waktu } = item;
+                    const dateFormatted = new Date(waktu).toLocaleDateString('id-ID', {
+                        day: 'numeric', month: 'short', year: 'numeric'
+                    });
+
+                    const card = document.createElement("div");
+                    card.className = "image-card bg-white rounded-xl shadow-sm border border-gray-100 flex flex-col";
+                    card.innerHTML = `
+                        <div class="relative overflow-hidden aspect-square">
+                            <img src="${url}" class="w-full h-full object-cover" alt="${keterangan || 'Foto Alam Terapi'}">
+                        </div>
+                        <div class="p-5 flex-grow flex flex-col justify-between">
+                            <p class="text-gray-800 font-medium line-clamp-2 mb-3">
+                                ${keterangan || '<span class="text-gray-400 italic font-normal">Tanpa keterangan</span>'}
+                            </p>
+                            <div class="flex items-center justify-between mt-auto pt-4 border-t border-gray-50">
+                                <span class="text-[10px] uppercase tracking-wider font-bold text-nature-300">
+                                    ${dateFormatted}
+                                </span>
+                                <button onclick="window.open('${url}', '_blank')" class="text-nature-500 hover:text-nature-700 p-1">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                    wadah.appendChild(card);
+                });
+            });
+        }
+
+        // Initialize display
+        tampilkanSemuaFoto();
+
+        // Check Auth to show/hide upload
+        onAuthStateChanged(auth, (user) => {
+            const uploadSection = document.getElementById('upload-section');
+            const authStatusText = document.querySelector('#authStatus span');
+            if (user) {
+                uploadSection.classList.remove('hidden');
+                authStatusText.innerText = user.email;
+            } else {
+                // For this blueprint, we keep upload visible but alert can be used
+                // or technically we could hide it if actual auth is implemented
+                console.log("Logged out state");
+            }
+        });
+    </script>
+</body>
+</html>
