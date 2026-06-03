@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ALAMTERAPY | Authentication</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Firebase SDK v8.10.1 -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: radial-gradient(circle at top right, #1e293b, #0f172a);
+        }
+        .glass-card {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        input:focus {
+            outline: none;
+            border-color: #10b981;
+            box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.2);
+        }
+        .btn-hover {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .btn-hover:hover {
+            transform: translateY(-2px);
+            filter: brightness(1.1);
+        }
+    </style>
+</head>
+<body class="min-h-screen flex items-center justify-center p-6 text-slate-100">
+
+    <!-- Auth Card -->
+    <div class="glass-card w-full max-w-md p-8 rounded-2xl shadow-2xl">
+        <div class="text-center mb-8">
+            <h2 class="text-3xl font-bold tracking-tight text-white mb-2">ALAMTERAPY</h2>
+            <p class="text-slate-400 text-sm">Masuk untuk melanjutkan sesi terapi Anda</p>
+        </div>
+
+        <div class="space-y-4">
+            <div>
+                <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-2 ml-1">Nomor HP</label>
+                <input id="hp" type="text" placeholder="08123456789"
+                    class="w-full p-4 bg-slate-900 border border-slate-700 rounded-xl focus:border-emerald-500 transition-all text-white placeholder-slate-600">
+            </div>
+
+            <div>
+                <label class="block text-xs font-semibold uppercase tracking-wider text-slate-500 mb-2 ml-1">Password</label>
+                <input id="password" type="password" placeholder="••••••••"
+                    class="w-full p-4 bg-slate-900 border border-slate-700 rounded-xl focus:border-emerald-500 transition-all text-white placeholder-slate-600">
+            </div>
+
+            <button onclick="login()"
+                class="w-full bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-4 rounded-xl mt-4 btn-hover shadow-lg shadow-emerald-500/20">
+                Masuk Sekarang
+            </button>
+
+            <button onclick="daftar()"
+                class="w-full bg-transparent border border-slate-600 hover:border-blue-500 text-slate-300 hover:text-blue-400 font-semibold py-4 rounded-xl btn-hover">
+                Buat Akun Baru
+            </button>
+        </div>
+
+        <div class="mt-8 text-center">
+            <p class="text-[10px] text-slate-600 uppercase tracking-widest">Portal Keamanan Terenkripsi</p>
+        </div>
+    </div>
+
+    <script>
+        // FIREBASE CONFIGURATION
+        const firebaseConfig = {
+            apiKey: "AIzaSyAYG9MhzNiYKUy8XdmYmKWIH-kMUpxvGzk",
+            authDomain: "alamterapi1.firebaseapp.com",
+            databaseURL: "https://alamterapi1-default-rtdb.firebaseio.com",
+        };
+
+        // INITIALIZE FIREBASE
+        if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
+        }
+        const db = firebase.database();
+
+        // REGISTRATION FUNCTION
+        function daftar() {
+            const hp = document.getElementById("hp").value.trim();
+            const password = document.getElementById("password").value.trim();
+
+            if(hp === "" || password === ""){
+                alert("Mohon isi nomor HP dan Password terlebih dahulu.");
+                return;
+            }
+
+            db.ref("users/" + hp).set({
+                hp: hp,
+                password: password
+            }).then(() => {
+                alert("Pendaftaran berhasil! Silahkan Login.");
+            }).catch((error) => {
+                alert("Gagal mendaftar: " + error.message);
+            });
+        }
+
+        // LOGIN FUNCTION
+        function login() {
+            const hp = document.getElementById("hp").value.trim();
+            const password = document.getElementById("password").value.trim();
+
+            if(hp === "" || password === ""){
+                alert("Isi semua data!");
+                return;
+            }
+
+            db.ref("users/" + hp).once("value", function(snapshot) {
+                if(snapshot.exists()) {
+                    const data = snapshot.val();
+
+                    if(data.password === password){
+                        alert("Login berhasil! Mengalihkan ke dashboard...");
+                        window.location.href = "https://mustaintain3-cell.github.io/Musik/MonitoringTerapys.html";
+                    } else {
+                        alert("Password salah!");
+                    }
+                } else {
+                    alert("Akun tidak ditemukan!");
+                }
+            });
+        }
+    </script>
+</body>
+</html>
