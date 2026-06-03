@@ -556,4 +556,249 @@
 
 </body>
 </html>
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MY SOUL FAMILY REFLEXOLOGY Timer</title>
+    <style>
+        :root {
+            --primary-color: #4a7c59; /* Zen Green */
+            --secondary-color: #8fc0a9;
+            --bg-color: #faf3dd;
+            --text-color: #2b4532;
+            --accent-color: #d4a373;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            text-align: center;
+        }
+
+        .container {
+            background: white;
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            width: 90%;
+            max-width: 500px;
+        }
+
+        h1 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+            color: var(--primary-color);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        h2 {
+            font-size: 1rem;
+            margin-bottom: 2rem;
+            opacity: 0.8;
+            font-weight: normal;
+        }
+
+        #timer-display {
+            font-size: 5rem;
+            font-weight: bold;
+            margin: 1.5rem 0;
+            font-family: 'Courier New', Courier, monospace;
+            color: var(--text-color);
+        }
+
+        .presets {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 2rem;
+        }
+
+        button {
+            cursor: pointer;
+            border: none;
+            border-radius: 8px;
+            padding: 10px 20px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .btn-preset {
+            background-color: var(--secondary-color);
+            color: white;
+        }
+
+        .btn-preset:hover {
+            background-color: var(--primary-color);
+        }
+
+        .btn-preset.active {
+            background-color: var(--primary-color);
+            box-shadow: inset 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .btn-main {
+            padding: 15px 30px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        #start-pause {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        #start-pause:hover {
+            opacity: 0.9;
+        }
+
+        #reset {
+            background-color: var(--accent-color);
+            color: white;
+        }
+
+        #reset:hover {
+            opacity: 0.9;
+        }
+
+        .status {
+            margin-top: 1rem;
+            font-size: 0.9rem;
+            font-style: italic;
+            height: 1.2rem;
+        }
+
+        /* Animation for finished state */
+        .finished {
+            animation: blink 1s infinite;
+            color: #e63946 !important;
+        }
+
+        @keyframes blink {
+            0% { opacity: 1; }
+            50% { opacity: 0.3; }
+            100% { opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>MY SOUL FAMILY REFLEXOLOGY</h1>
+        <h2>Timer Waktu Pelayanan</h2>
+
+        <div class="presets">
+            <button class="btn-preset" onclick="setTimer(60, this)">60 Menit</button>
+            <button class="btn-preset" onclick="setTimer(90, this)">90 Menit</button>
+            <button class="btn-preset" onclick="setTimer(120, this)">120 Menit</button>
+        </div>
+
+        <div id="timer-display">60:00</div>
+
+        <div class="controls">
+            <button id="start-pause" class="btn-main" onclick="toggleTimer()">Mulai</button>
+            <button id="reset" class="btn-main" onclick="resetTimer()">Reset</button>
+        </div>
+
+        <div class="status" id="status-text">Pilih durasi untuk memulai</div>
+    </div>
+
+    <!-- Hidden audio element for notification (can use a base64 string or a synthesizer) -->
+    <audio id="alarm-sound" src="https://actions.google.com/sounds/v1/alarms/beep_short.ogg"></audio>
+
+    <script>
+        let timeLeft = 3600; // Default 60 minutes
+        let timerInterval = null;
+        let isRunning = false;
+        let originalTime = 3600;
+
+        const display = document.getElementById('timer-display');
+        const startPauseBtn = document.getElementById('start-pause');
+        const statusText = document.getElementById('status-text');
+        const alarm = document.getElementById('alarm-sound');
+
+        function updateDisplay() {
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+            display.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            
+            if (timeLeft === 0) {
+                clearInterval(timerInterval);
+                display.classList.add('finished');
+                statusText.textContent = "Waktu Pelayanan Selesai!";
+                startPauseBtn.textContent = "Selesai";
+                startPauseBtn.disabled = true;
+                alarm.play().catch(e => console.log("Audio play blocked by browser."));
+                // Simple vibration if supported
+                if ("vibrate" in navigator) navigator.vibrate([500, 200, 500]);
+            }
+        }
+
+        function setTimer(minutes, element) {
+            clearInterval(timerInterval);
+            isRunning = false;
+            timeLeft = minutes * 60;
+            originalTime = timeLeft;
+            
+            // UI Updates
+            display.classList.remove('finished');
+            startPauseBtn.textContent = 'Mulai';
+            startPauseBtn.disabled = false;
+            statusText.textContent = `Durasi ${minutes} menit dipilih`;
+            
+            // Button styles
+            document.querySelectorAll('.btn-preset').forEach(btn => btn.classList.remove('active'));
+            if(element) element.classList.add('active');
+            
+            updateDisplay();
+        }
+
+        function toggleTimer() {
+            if (isRunning) {
+                clearInterval(timerInterval);
+                startPauseBtn.textContent = 'Lanjutkan';
+                statusText.textContent = 'Timer Dihentikan Sementara';
+            } else {
+                if (timeLeft <= 0) return;
+                
+                statusText.textContent = 'Pelayanan sedang berjalan...';
+                startPauseBtn.textContent = 'Berhenti';
+                timerInterval = setInterval(() => {
+                    timeLeft--;
+                    updateDisplay();
+                }, 1000);
+            }
+            isRunning = !isRunning;
+        }
+
+        function resetTimer() {
+            clearInterval(timerInterval);
+            isRunning = false;
+            timeLeft = originalTime;
+            display.classList.remove('finished');
+            startPauseBtn.textContent = 'Mulai';
+            startPauseBtn.disabled = false;
+            statusText.textContent = 'Timer direset';
+            updateDisplay();
+        }
+
+        // Initialize display
+        updateDisplay();
+    </script>
+</body>
+</html>
 
