@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>ANGJAJENIUS JOY SANDY - Game Angka Jackpot</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      text-align: center;
+      background: radial-gradient(circle, #1a1a2e 0%, #16213e 100%);
+      color: white;
+      margin: 0;
+      padding: 20px;
+      overflow-x: hidden;
+    }
+
+    h1 {
+      color: #00fff2;
+      text-shadow: 0 0 10px #00fff2;
+      margin-bottom: 5px;
+      font-size: 24px;
+    }
+
+    .brand-title {
+      font-size: 14px;
+      letter-spacing: 4px;
+      color: #ff00ff;
+      margin-bottom: 20px;
+      text-transform: uppercase;
+      font-weight: bold;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(4, 75px);
+      gap: 10px;
+      justify-content: center;
+      margin: 20px auto;
+    }
+
+    .box {
+      width: 75px;
+      height: 75px;
+      background: #e94560;
+      color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 20px;
+      font-weight: bold;
+      border-radius: 15px;
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+      transition: all 0.2s ease;
+      user-select: none;
+    }
+
+    .box:hover {
+      transform: translateY(-3px);
+      filter: brightness(1.2);
+    }
+
+    .box.active {
+      background: #00fff2;
+      color: #1a1a2e;
+      box-shadow: 0 0 20px #00fff2;
+      border: 3px solid white;
+    }
+
+    .hasil-box {
+      margin: 20px auto;
+      width: 320px;
+      height: 60px;
+      background: rgba(255,255,255,0.1);
+      border-radius: 15px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 20px;
+      border: 1px solid rgba(255,255,255,0.2);
+    }
+
+    #hasil {
+      font-size: 28px;
+      font-weight: bold;
+      color: #0f0;
+      text-shadow: 0 0 5px #0f0;
+    }
+
+    .hapus-hasil {
+      background: #ff4d4d;
+      padding: 5px 12px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: 0.2s;
+    }
+
+    .hapus-hasil:hover {
+      background: #ff0000;
+      transform: scale(1.1);
+    }
+
+    .keypad {
+      margin: 20px auto;
+      display: grid;
+      grid-template-columns: repeat(3, 70px);
+      gap: 12px;
+      justify-content: center;
+    }
+
+    .btn {
+      background: #16213e;
+      color: white;
+      padding: 15px;
+      font-size: 18px;
+      border-radius: 12px;
+      cursor: pointer;
+      border: 1px solid #0f3460;
+      transition: all 0.1s;
+      user-select: none;
+    }
+
+    .btn:active {
+      transform: scale(0.9);
+      background: #00fff2;
+      color: #16213e;
+    }
+
+    .btn.reset {
+      background: #ff4d4d;
+    }
+
+    #jackpotText {
+      font-size: 36px;
+      font-weight: 900;
+      color: #ffd700;
+      margin: 20px 0;
+      display: none;
+      text-shadow: 0 0 20px #ffd700, 0 0 40px #ff00ff;
+      animation: blink 0.5s infinite alternate;
+    }
+
+    @keyframes blink {
+      from { opacity: 0.5; transform: scale(1); }
+      to { opacity: 1; transform: scale(1.1); }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="brand-title">ANGJAJENIUS JOY SANDY</div>
+  <h1>🎮 Game Angka Jackpot</h1>
+
+  <div id="jackpotText">🎰 JACKPOT!!! 🎰</div>
+
+  <div class="grid" id="grid"></div>
+
+  <div class="hasil-box">
+    <div>TOTAL SCORE:</div>
+    <div id="hasil">0</div>
+    <div class="hapus-hasil" onclick="hapusHasil()">CLEAR</div>
+  </div>
+
+  <div class="keypad">
+    <div class="btn" onclick="inputAngka(1)">1</div>
+    <div class="btn" onclick="inputAngka(2)">2</div>
+    <div class="btn" onclick="inputAngka(3)">3</div>
+    <div class="btn" onclick="inputAngka(4)">4</div>
+    <div class="btn" onclick="inputAngka(5)">5</div>
+    <div class="btn" onclick="inputAngka(6)">6</div>
+    <div class="btn" onclick="inputAngka(7)">7</div>
+    <div class="btn" onclick="inputAngka(8)">8</div>
+    <div class="btn" onclick="inputAngka(9)">9</div>
+    <div class="btn" onclick="hapus()">⌫</div>
+    <div class="btn" onclick="inputAngka(0)">0</div>
+    <div class="btn reset" onclick="resetSemua()">C</div>
+  </div>
+
+  <script>
+    let grid = document.getElementById("grid");
+    let kotakAktif = null;
+    let daftarKlik = [];
+
+    // Web Audio API for self-contained "cute" sounds
+    const AudioCtx = window.AudioContext || window.webkitAudioContext;
+    const audioCtx = new AudioCtx();
+
+    function playCuteClick(freq = 880, type = 'sine', duration = 0.1) {
+      if (audioCtx.state === 'suspended') audioCtx.resume();
+      
+      const oscillator = audioCtx.createOscillator();
+      const gainNode = audioCtx.createGain();
+
+      oscillator.type = type;
+      oscillator.frequency.setValueAtTime(freq, audioCtx.currentTime);
+      oscillator.frequency.exponentialRampToValueAtTime(10, audioCtx.currentTime + duration);
+
+      gainNode.gain.setValueAtTime(0.2, audioCtx.currentTime);
+      gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + duration);
+
+      oscillator.connect(gainNode);
+      gainNode.connect(audioCtx.destination);
+
+      oscillator.start();
+      oscillator.stop(audioCtx.currentTime + duration);
+    }
+
+    function playJackpotSound() {
+      const duration = 2;
+      const startTime = audioCtx.currentTime;
+      
+      for(let i = 0; i < 5; i++) {
+        const time = startTime + i * 0.3;
+        const osc = audioCtx.createOscillator();
+        const g = audioCtx.createGain();
+        osc.frequency.setValueAtTime(500 + (i * 200), time);
+        g.gain.setValueAtTime(0.1, time);
+        g.gain.exponentialRampToValueAtTime(0.001, time + 0.5);
+        osc.connect(g);
+        g.connect(audioCtx.destination);
+        osc.start(time);
+        osc.stop(time + 0.5);
+      }
+    }
+
+    // Initialize Grid
+    for (let i = 0; i < 16; i++) {
+      let div = document.createElement("div");
+      div.className = "box";
+      div.innerText = "0";
+
+      div.onclick = function () {
+        playCuteClick(1200, 'triangle', 0.1); // "Cuter" high-pitched pop
+        pilihKotak(this);
+        tambahHitung(this);
+      };
+
+      grid.appendChild(div);
+    }
+
+    function pilihKotak(el) {
+      document.querySelectorAll(".box").forEach(k => k.classList.remove("active"));
+      el.classList.add("active");
+      kotakAktif = el;
+    }
+
+    function inputAngka(num) {
+      playCuteClick(600, 'sine', 0.05);
+      if (!kotakAktif) return;
+
+      let angka = kotakAktif.innerText;
+      if (angka === "0") angka = "";
+
+      angka += num;
+
+      // Limit to 4 digits for balance
+      if (parseInt(angka) > 9999) return;
+
+      kotakAktif.innerText = angka;
+    }
+
+    function hapus() {
+      playCuteClick(400, 'square', 0.05);
+      if (!kotakAktif) return;
+
+      let angka = kotakAktif.innerText;
+      angka = angka.slice(0, -1);
+
+      if (angka === "") angka = "0";
+
+      kotakAktif.innerText = angka;
+    }
+
+    function tambahHitung(el) {
+      let nilai = parseInt(el.innerText);
+      if (nilai > 0) {
+        daftarKlik.push(nilai);
+        hitungTotal();
+      }
+    }
+
+    function hitungTotal() {
+      let total = daftarKlik.reduce((a, b) => a + b, 0);
+      document.getElementById("hasil").innerText = total;
+
+      if (total >= 10000) {
+        jackpot();
+      }
+    }
+
+    function jackpot() {
+      playJackpotSound();
+      let text = document.getElementById("jackpotText");
+      text.style.display = "block";
+
+      let boxes = document.querySelectorAll(".box");
+      boxes.forEach((box, i) => {
+        setTimeout(() => {
+          box.style.background = "gold";
+          box.style.boxShadow = "0 0 30px gold";
+          box.style.color = "black";
+        }, i * 50);
+      });
+
+      setTimeout(() => {
+        boxes.forEach(box => {
+          box.style.background = "#e94560";
+          box.style.boxShadow = "0 4px 10px rgba(0,0,0,0.3)";
+          box.style.color = "white";
+        });
+        text.style.display = "none";
+        resetSemua(); // Reset after jackpot to keep it clean
+      }, 3000);
+    }
+
+    function hapusHasil() {
+      playCuteClick(200, 'sawtooth', 0.2);
+      daftarKlik = [];
+      document.getElementById("hasil").innerText = "0";
+    }
+
+    function resetSemua() {
+      playCuteClick(300, 'sawtooth', 0.3);
+      hapusHasil();
+      document.querySelectorAll(".box").forEach(k => {
+        k.innerText = "0";
+        k.classList.remove("active");
+      });
+      kotakAktif = null;
+    }
+  </script>
+</body>
+</html>
+
